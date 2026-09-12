@@ -1,3 +1,5 @@
+import { SectionHeading } from "@/components/section-heading";
+
 const items = [
   {
     number: "01",
@@ -20,7 +22,8 @@ const items = [
 export function WhatIDo() {
   return (
     <section className="px-6 pb-20 sm:px-10 lg:px-16">
-      <div className="grid gap-10 sm:grid-cols-3 sm:gap-8">
+      <SectionHeading>What I do</SectionHeading>
+      <div className="mt-6 grid gap-10 sm:grid-cols-3 sm:gap-8">
         {items.map((item) => (
           <div key={item.number}>
             <p className="font-mono text-xs text-muted">{item.number}</p>

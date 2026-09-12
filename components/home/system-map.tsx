@@ -8,7 +8,7 @@ export function SystemMap() {
       aria-hidden="true"
       focusable="false"
       viewBox="0 0 320 440"
-      className="hidden w-full max-w-sm lg:block"
+      className="w-full max-w-[200px] sm:max-w-[240px] lg:max-w-sm"
     >
       <path
         d="M50,50 C170,50 170,150 250,150 C330,150 10,260 90,260 C170,260 290,360 220,360"
