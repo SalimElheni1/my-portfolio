@@ -1,0 +1,17 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev # build only up through the "dev" stage of the Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      # :z relabels the host folder so SELinux (enforcing by default on Fedora)
+      # allows the container to read/write it -- without it you'd hit
+      # "permission denied" even though the Unix file permissions look fine.
+      - .:/app:z
+      - /app/node_modules # anonymous volume: keeps the container's own node_modules,
+      - /app/.next #        instead of letting the bind mount above hide it
+    environment:
+      - NODE_ENV=development
