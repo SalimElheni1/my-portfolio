@@ -1,4 +1,5 @@
 import { profile } from "@/content/profile";
+import { ContactForm } from "@/components/home/contact-form";
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
@@ -12,7 +13,13 @@ export function SiteFooter() {
         <p className="mt-4 max-w-md text-muted">
           Open to Full-Stack JavaScript opportunities · Interesting products · Collaboration
         </p>
-        <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4 text-sm">
+
+        <div className="mt-10">
+          <ContactForm />
+        </div>
+
+        <p className="mt-10 text-sm text-muted">Or reach me directly:</p>
+        <div className="mt-3 flex flex-wrap items-center gap-x-8 gap-y-4 text-sm">
           <a
             href={`mailto:${profile.email}`}
             className="border-b border-muted pb-0.5 text-foreground transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
