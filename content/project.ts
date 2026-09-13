@@ -16,6 +16,7 @@ export type Project = {
   modules: string[];
   architecture: string[];
   outcome: string;
+  screenshots: { src: string; alt: string; width: number; height: number }[];
 };
 
 export const projects: Project[] = [
@@ -47,5 +48,37 @@ export const projects: Project[] = [
     ],
     outcome:
       "Shipped from first commit to first production release in 18 days, then maintained across 20+ releases over the following year in response to real user feedback — now in daily use at the association.",
+    screenshots: [
+      {
+        src: "/work/quran-association-manager/dashboard.webp",
+        alt: "Dashboard showing active classes, teachers, and students at a glance",
+        width: 1600,
+        height: 827,
+      },
+      {
+        src: "/work/quran-association-manager/login.webp",
+        alt: "Arabic right-to-left login screen",
+        width: 1600,
+        height: 1295,
+      },
+      {
+        src: "/work/quran-association-manager/students.webp",
+        alt: "Student records list with search and filtering",
+        width: 1600,
+        height: 1295,
+      },
+      {
+        src: "/work/quran-association-manager/classes.webp",
+        alt: "Class management with teacher assignment and prayer-time-based scheduling",
+        width: 1600,
+        height: 827,
+      },
+      {
+        src: "/work/quran-association-manager/finance.webp",
+        alt: "Financial dashboard with income and expense breakdown by category",
+        width: 1600,
+        height: 827,
+      },
+    ],
   },
 ];

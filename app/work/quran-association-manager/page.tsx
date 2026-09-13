@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { projects } from "@/content/project";
 import { SectionHeading } from "@/components/section-heading";
@@ -39,6 +40,17 @@ export default function ProjectPage() {
         </a>
       </div>
 
+      <div className="mt-12 overflow-hidden rounded-2xl border border-border">
+        <Image
+          src={project.screenshots[0].src}
+          alt={project.screenshots[0].alt}
+          width={project.screenshots[0].width}
+          height={project.screenshots[0].height}
+          className="w-full"
+          priority
+        />
+      </div>
+
       <section className="mt-20">
         <SectionHeading>Timeline</SectionHeading>
         <p className="mt-6 text-base leading-relaxed text-muted">
@@ -66,6 +78,13 @@ export default function ProjectPage() {
             </li>
           ))}
         </ul>
+        <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+          {project.screenshots.slice(1).map((shot) => (
+            <div key={shot.src} className="overflow-hidden rounded-2xl border border-border">
+              <Image src={shot.src} alt={shot.alt} width={shot.width} height={shot.height} className="w-full" />
+            </div>
+          ))}
+        </div>
       </section>
 
       <section className="mt-16">
