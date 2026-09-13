@@ -6,6 +6,13 @@ import { profile } from "@/content/profile";
 // .env.local for local dev) — see .env.example.
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 
+// Resend's unverified/sandbox mode only allows delivery to the exact email
+// address the Resend account was signed up with — not the public contact
+// address in profile.ts. CONTACT_TO_EMAIL overrides where notifications
+// actually land; once a domain is bought and verified with Resend, remove
+// the override and this falls back to the public address.
+const CONTACT_TO_EMAIL = process.env.CONTACT_TO_EMAIL || profile.email;
+
 const MAX_LENGTHS = { name: 100, email: 200, message: 5000 };
 
 function isValidEmail(value: string): boolean {
@@ -62,7 +69,7 @@ export async function POST(request: Request) {
     },
     body: JSON.stringify({
       from: "Portfolio Contact Form <onboarding@resend.dev>",
-      to: [profile.email],
+      to: [CONTACT_TO_EMAIL],
       reply_to: email,
       subject: `New message from ${name} (via portfolio site)`,
       text: `From: ${name} <${email}>\n\n${message}`,
