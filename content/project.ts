@@ -15,6 +15,7 @@ export type Project = {
   solution: string;
   modules: string[];
   architecture: string[];
+  hardest: string;
   outcome: string;
   screenshots: { src: string; alt: string; width: number; height: number }[];
 };
@@ -46,6 +47,8 @@ export const projects: Project[] = [
       "PDF and Excel export for records and reports",
       "Backup workflows for local data safety",
     ],
+    hardest:
+      "Arabic right-to-left support and role-based access control were the two hardest parts of the build.",
     outcome:
       "Shipped from first commit to first production release in 18 days, then maintained across 20+ releases over the following year in response to real user feedback — now in daily use at the association.",
     screenshots: [

@@ -5,6 +5,9 @@ import { profile } from "@/content/profile";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
+const fieldClassName =
+  "rounded-sm border border-border-strong bg-sunken px-4 py-2.5 font-body text-heading transition-colors placeholder:text-disabled hover:border-muted focus:border-accent";
+
 export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState("");
@@ -40,14 +43,14 @@ export function ContactForm() {
 
   if (status === "success") {
     return (
-      <p role="status" className="max-w-md text-base text-foreground">
+      <p role="status" className="rounded-md border border-success bg-success-wash px-5 py-4 text-base text-heading">
         Thanks — your message is on its way. I&apos;ll get back to you soon.
       </p>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex max-w-md flex-col gap-5" noValidate>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
       {/* Honeypot: invisible to real visitors, hidden from screen readers and
           keyboard tab order. Bots that auto-fill every field tend to fill
           this one, which flags the submission as spam server-side. */}
@@ -64,10 +67,11 @@ export function ContactForm() {
           id="name"
           name="name"
           type="text"
+          autoComplete="name"
           required
           maxLength={100}
           disabled={status === "submitting"}
-          className="rounded-lg border border-border bg-surface px-4 py-2.5 text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          className={fieldClassName}
         />
       </div>
 
@@ -79,10 +83,11 @@ export function ContactForm() {
           id="email"
           name="email"
           type="email"
+          autoComplete="email"
           required
           maxLength={200}
           disabled={status === "submitting"}
-          className="rounded-lg border border-border bg-surface px-4 py-2.5 text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          className={fieldClassName}
         />
       </div>
 
@@ -97,14 +102,14 @@ export function ContactForm() {
           rows={5}
           maxLength={5000}
           disabled={status === "submitting"}
-          className="resize-y rounded-lg border border-border bg-surface px-4 py-2.5 text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          className={`resize-y ${fieldClassName}`}
         />
       </div>
 
       {status === "error" && (
-        <p role="alert" className="text-sm text-red-600 dark:text-red-400">
+        <p role="alert" className="text-sm text-error">
           {errorMessage} Or email me directly at{" "}
-          <a href={`mailto:${profile.email}`} className="underline">
+          <a href={`mailto:${profile.email}`} className="underline underline-offset-2">
             {profile.email}
           </a>
           .
@@ -114,7 +119,7 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={status === "submitting"}
-        className="inline-flex w-fit items-center rounded-full bg-accent px-8 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-85 disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+        className="inline-flex w-fit items-center rounded-md border border-accent bg-accent px-6 py-3 font-display text-base font-medium text-on-accent transition-colors hover:border-accent-bright hover:bg-accent-bright active:translate-y-px disabled:cursor-not-allowed disabled:opacity-60"
       >
         {status === "submitting" ? "Sending…" : "Send message"}
       </button>

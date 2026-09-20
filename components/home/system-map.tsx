@@ -1,39 +1,43 @@
-/**
- * Decorative only: an abstract flowing path connecting four labeled nodes.
- * Static (no animation) so prefers-reduced-motion never has anything to disable.
- */
+const steps = [
+  { label: "Understand", note: "A Quranic association branch, run entirely on paper" },
+  { label: "Build", note: "Offline-first desktop app: Electron, React, SQLite" },
+  { label: "Ship", note: "v1.0.0 in production 18 days after the first commit" },
+  { label: "Improve", note: "20+ releases since, in daily use" },
+];
+
+/** One project, start to release. Plain HTML so it stays legible at every width. */
 export function SystemMap() {
   return (
-    <svg
-      aria-hidden="true"
-      focusable="false"
-      viewBox="0 0 320 440"
-      className="w-full max-w-[200px] sm:max-w-[240px] lg:max-w-sm"
-    >
-      <path
-        d="M50,50 C170,50 170,150 250,150 C330,150 10,260 90,260 C170,260 290,360 220,360"
-        stroke="currentColor"
-        className="text-muted"
-        strokeWidth="1"
-        strokeDasharray="3 5"
-        fill="none"
-      />
-      <circle cx="50" cy="50" r="7" className="fill-background stroke-accent" strokeWidth="2" />
-      <circle cx="250" cy="150" r="7" className="fill-background stroke-accent" strokeWidth="2" />
-      <circle cx="90" cy="260" r="7" className="fill-background stroke-accent" strokeWidth="2" />
-      <circle cx="220" cy="360" r="9" className="fill-accent" />
-      <text x="66" y="46" className="fill-muted font-mono" fontSize="11" letterSpacing="1">
-        UNDERSTAND
-      </text>
-      <text x="266" y="146" className="fill-muted font-mono" fontSize="11" letterSpacing="1">
-        BUILD
-      </text>
-      <text x="10" y="285" className="fill-muted font-mono" fontSize="11" letterSpacing="1">
-        SHIP
-      </text>
-      <text x="236" y="356" className="fill-accent font-mono" fontSize="11" letterSpacing="1">
-        IMPROVE
-      </text>
-    </svg>
+    <figure className="rounded-lg border border-rule bg-surface p-7 shadow-elev-1 sm:p-9">
+      <figcaption className="font-display text-base font-medium text-heading">
+        How the Quran Association Manager got built
+      </figcaption>
+      <ol className="mt-7 flex flex-col">
+        {steps.map((step, index) => {
+          const isLast = index === steps.length - 1;
+          return (
+            <li
+              key={step.label}
+              className="step-in relative pb-8 pl-9 last:pb-0"
+              style={{ animationDelay: `${index * 140 + 150}ms` }}
+            >
+              {!isLast && (
+                <span aria-hidden="true" className="absolute left-[6px] top-5 h-full w-px bg-rule" />
+              )}
+              <span
+                aria-hidden="true"
+                className={
+                  isLast
+                    ? "absolute left-0 top-1.5 h-3.5 w-3.5 rounded-full bg-accent shadow-glow-accent"
+                    : "absolute left-0 top-1.5 h-3.5 w-3.5 rounded-full border-2 border-accent-dim bg-surface"
+                }
+              />
+              <p className="font-display text-lg font-medium leading-snug text-heading">{step.label}</p>
+              <p className="mt-1 text-sm leading-snug text-muted">{step.note}</p>
+            </li>
+          );
+        })}
+      </ol>
+    </figure>
   );
 }

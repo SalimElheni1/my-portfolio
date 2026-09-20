@@ -1,50 +1,53 @@
 import { profile } from "@/content/profile";
 import { ContactForm } from "@/components/home/contact-form";
 
+const directLinks = [
+  { label: "Email", value: profile.email, href: `mailto:${profile.email}` },
+  { label: "GitHub", value: profile.github.label, href: profile.github.url, external: true },
+  { label: "LinkedIn", value: profile.linkedin.label, href: profile.linkedin.url, external: true },
+];
+
 export function SiteFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer id="contact" className="px-6 py-16 sm:px-10 lg:px-16">
-      <div className="border-t border-border pt-12">
-        <h2 className="font-serif text-3xl italic font-normal text-foreground sm:text-4xl">
-          Let&apos;s build something useful.
-        </h2>
-        <p className="mt-4 max-w-md text-muted">
-          Open to Full-Stack JavaScript opportunities · Interesting products · Collaboration
-        </p>
-
-        <div className="mt-10">
-          <ContactForm />
+    <footer id="contact" aria-labelledby="contact-heading" className="wrap pb-10 pt-16 sm:pt-20">
+      <div className="tick-rule" aria-hidden="true" />
+      <div className="grid gap-12 pt-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,28rem)] lg:gap-20">
+        <div>
+          <h2
+            id="contact-heading"
+            className="font-display text-3xl font-semibold tracking-tight text-heading sm:text-4xl"
+          >
+            Let&apos;s build something useful.
+          </h2>
+          <p className="mt-4 max-w-md text-base leading-relaxed text-muted">
+            Open to Full-Stack JavaScript roles, interesting products, and collaboration: remote, hybrid, or
+            relocation-friendly.
+          </p>
+          <ul className="mt-10 divide-y divide-hairline border-y border-hairline">
+            {directLinks.map((link) => (
+              <li key={link.label} className="grid gap-1 py-4 sm:grid-cols-[6rem_1fr] sm:gap-6">
+                <span className="text-sm text-muted">{link.label}</span>
+                <a
+                  href={link.href}
+                  {...(link.external ? { target: "_blank", rel: "noreferrer" } : {})}
+                  className="w-fit break-all text-base text-heading transition-colors hover:text-accent-ink"
+                >
+                  {link.value}
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
-
-        <p className="mt-10 text-sm text-muted">Or reach me directly:</p>
-        <div className="mt-3 flex flex-wrap items-center gap-x-8 gap-y-4 text-sm">
-          <a
-            href={`mailto:${profile.email}`}
-            className="border-b border-muted pb-0.5 text-foreground transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
-          >
-            {profile.email}
-          </a>
-          <a
-            href={profile.github.url}
-            target="_blank"
-            rel="noreferrer"
-            className="border-b border-muted pb-0.5 text-foreground transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
-          >
-            GitHub
-          </a>
-          <a
-            href={profile.linkedin.url}
-            target="_blank"
-            rel="noreferrer"
-            className="border-b border-muted pb-0.5 text-foreground transition-opacity hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
-          >
-            LinkedIn
-          </a>
-        </div>
-        <p className="mt-14 font-mono text-xs uppercase tracking-wider text-muted">
+        <ContactForm />
+      </div>
+      <div className="mt-16 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+        <p className="font-mono text-xs text-muted">
           © {year} {profile.name}
+        </p>
+        <p className="font-arabic text-sm text-muted" dir="rtl" lang="ar">
+          سليم الهاني
         </p>
       </div>
     </footer>

@@ -1,27 +1,32 @@
 import type { Metadata } from "next";
-import { Newsreader, Public_Sans, IBM_Plex_Mono } from "next/font/google";
+import { Instrument_Sans, Source_Serif_4, IBM_Plex_Mono, Reem_Kufi } from "next/font/google";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import "./globals.css";
 
-const newsreader = Newsreader({
-  variable: "--font-newsreader",
+const instrumentSans = Instrument_Sans({
+  variable: "--font-instrument-sans",
   subsets: ["latin"],
-  style: ["normal", "italic"],
-  weight: ["300", "400", "500"],
+  weight: ["400", "500", "600", "700"],
 });
 
-const publicSans = Public_Sans({
-  variable: "--font-public-sans",
+const sourceSerif = Source_Serif_4({
+  variable: "--font-source-serif",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
+  weight: ["400", "600"],
 });
 
 const ibmPlexMono = IBM_Plex_Mono({
   variable: "--font-ibm-plex-mono",
   subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: ["400", "500", "600"],
+});
+
+const reemKufi = Reem_Kufi({
+  variable: "--font-reem-kufi",
+  subsets: ["arabic"],
+  weight: ["400"],
 });
 
 export const metadata: Metadata = {
@@ -38,13 +43,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${newsreader.variable} ${publicSans.variable} ${ibmPlexMono.variable} h-full antialiased`}
+      className={`${instrumentSans.variable} ${sourceSerif.variable} ${ibmPlexMono.variable} ${reemKufi.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col font-sans font-light">
+      <body className="flex min-h-full flex-col font-body text-md leading-relaxed">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <a
             href="#main-content"
-            className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-accent focus:px-4 focus:py-2 focus:text-accent-foreground"
+            className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-accent focus:px-4 focus:py-2 focus:font-display focus:font-medium focus:text-on-accent"
           >
             Skip to content
           </a>

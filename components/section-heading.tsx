@@ -1,7 +1,9 @@
 import type { ReactNode } from "react";
 
-export function SectionHeading({ children }: { children: ReactNode }) {
+export function SectionHeading({ children, id }: { children: ReactNode; id?: string }) {
   return (
-    <h2 className="font-mono text-xs uppercase tracking-widest text-muted">{children}</h2>
+    <h2 id={id} className="font-display text-2xl font-semibold tracking-tight text-heading sm:text-3xl">
+      {children}
+    </h2>
   );
 }

@@ -99,3 +99,14 @@ export const education: EducationItem[] = [
     period: "2008 – 2011",
   },
 ];
+
+export type TimelineItem = { period: string; label: string };
+
+/** Condensed chronology for the home page; dates follow the Master Profile §3. */
+export const timeline: TimelineItem[] = [
+  { period: "2014 – 2021", label: "Scientific research in computer vision and image processing, Monastir" },
+  { period: "2016 – 2020", label: "University teaching: electronics, image processing, VHDL" },
+  { period: "Aug – Dec 2021", label: "Full Stack JS Web Developer Bootcamp" },
+  { period: "2022 – Present", label: "Full-Stack JavaScript Developer, PerfectSoft" },
+  { period: "2025 – Present", label: "Quran Association Manager, open-source desktop app in daily use" },
+];
