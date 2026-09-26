@@ -4,29 +4,33 @@ import { TagList } from "@/components/tag-list";
 
 export function Skills() {
   return (
-    <section aria-labelledby="engineering-heading" className="wrap py-14 sm:py-20">
-      <SectionHeading id="engineering-heading">Engineering</SectionHeading>
-      <dl className="mt-8 divide-y divide-hairline border-y border-hairline">
-        {skillTiers.map((tier) => {
+    <section aria-labelledby="stack-heading" className="flex flex-col gap-6">
+      <SectionHeading id="stack-heading" eyebrow="04 / Stack matrix" meta="Grouped by depth of use">
+        Tools and technologies
+      </SectionHeading>
+      <div className="divide-y divide-line2 rounded-md bg-surface px-[26px] shadow-card ring-1 ring-inset ring-line">
+        {skillTiers.map((tier, index) => {
           const isShortList = tier.items.every((item) => item.length <= 28);
           return (
-            <div key={tier.label} className="grid gap-3 py-5 md:grid-cols-[13rem_1fr] md:gap-10">
-              <dt className="font-display text-base font-medium text-heading">{tier.label}</dt>
-              <dd>
+            <div key={tier.label} className="flex flex-wrap gap-x-6 gap-y-3 py-[22px]">
+              <h3 className="flex-[1_1_260px] font-display text-base font-semibold leading-6 text-ink">
+                {tier.label}
+              </h3>
+              <div className="flex-[1_1_340px]">
                 {isShortList ? (
-                  <TagList items={tier.items} />
+                  <TagList items={tier.items} tone={index === 0 ? "accent" : "neutral"} />
                 ) : (
-                  <ul className="flex flex-col gap-1.5 text-base leading-snug text-muted">
+                  <ul className="flex flex-col gap-1.5 text-sm leading-snug text-muted">
                     {tier.items.map((item) => (
                       <li key={item}>{item}</li>
                     ))}
                   </ul>
                 )}
-              </dd>
+              </div>
             </div>
           );
         })}
-      </dl>
+      </div>
     </section>
   );
 }

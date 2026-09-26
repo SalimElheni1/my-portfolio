@@ -13,6 +13,14 @@ const RESEND_API_KEY = process.env.RESEND_API_KEY;
 // the override and this falls back to the public address.
 const CONTACT_TO_EMAIL = process.env.CONTACT_TO_EMAIL || profile.email;
 
+// Must match the options in components/home/contact-form.tsx.
+const SUBJECTS: Record<string, string> = {
+  "full-time": "Full-time role",
+  contract: "Contract or freelance",
+  desktop: "Desktop / offline-first application",
+  other: "Something else",
+};
+
 const MAX_LENGTHS = { name: 100, email: 200, message: 5000 };
 
 function isValidEmail(value: string): boolean {
@@ -30,6 +38,8 @@ export async function POST(request: Request) {
   const name = typeof body.name === "string" ? body.name.trim() : "";
   const email = typeof body.email === "string" ? body.email.trim() : "";
   const message = typeof body.message === "string" ? body.message.trim() : "";
+  const subjectKey = typeof body.subject === "string" ? body.subject : "";
+  const subject = SUBJECTS[subjectKey] ?? SUBJECTS.other;
   // Honeypot: a field real visitors never see or fill in (hidden via CSS).
   // Bots that auto-fill every input tend to fill it — if it's non-empty,
   // pretend success without actually sending anything.
@@ -71,8 +81,8 @@ export async function POST(request: Request) {
       from: "Portfolio Contact Form <onboarding@resend.dev>",
       to: [CONTACT_TO_EMAIL],
       reply_to: email,
-      subject: `New message from ${name} (via portfolio site)`,
-      text: `From: ${name} <${email}>\n\n${message}`,
+      subject: `${subject}: new message from ${name} (via portfolio site)`,
+      text: `From: ${name} <${email}>\nSubject: ${subject}\n\n${message}`,
     }),
   });
 

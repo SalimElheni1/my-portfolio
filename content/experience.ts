@@ -100,13 +100,46 @@ export const education: EducationItem[] = [
   },
 ];
 
-export type TimelineItem = { period: string; label: string };
+export type PathItem = {
+  period: string;
+  title: string;
+  description: string;
+  /** current roles get the accent colour on the date */
+  current?: boolean;
+};
 
-/** Condensed chronology for the home page; dates follow the Master Profile §3. */
-export const timeline: TimelineItem[] = [
-  { period: "2014 – 2021", label: "Scientific research in computer vision and image processing, Monastir" },
-  { period: "2016 – 2020", label: "University teaching: electronics, image processing, VHDL" },
-  { period: "Aug – Dec 2021", label: "Full Stack JS Web Developer Bootcamp" },
-  { period: "2022 – Present", label: "Full-Stack JavaScript Developer, PerfectSoft" },
-  { period: "2025 – Present", label: "Quran Association Manager, open-source desktop app in daily use" },
+/** Home-page "Path" section, newest first; dates follow the Master Profile §3. */
+export const path: PathItem[] = [
+  {
+    period: "Jun 2022 – present",
+    title: "Full-Stack JavaScript Developer · PerfectSoft, Sfax",
+    description:
+      "Small product team serving two client products. Ownership spans backend logic, integrations, front end, and automated testing.",
+    current: true,
+  },
+  {
+    period: "Aug 2025 – present",
+    title: "Creator and maintainer · Quran Association Manager",
+    description:
+      "Personal open-source project. Architecture, packaging, and continuous release of a desktop system in daily use.",
+    current: true,
+  },
+  {
+    period: "Aug – Dec 2021",
+    title: "Full Stack JS Web Developer Bootcamp · CrocoCoder & CORP, remote",
+    description:
+      "Deliberate move out of academia and into software: modern JavaScript, component patterns, REST APIs, relational and document databases.",
+  },
+  {
+    period: "Sep 2016 – Jun 2020",
+    title: "University Teacher · National Engineering School of Monastir",
+    description:
+      "Taught electronics, image processing, peripheral interfacing, and VHDL to engineering students. Mentored 300+ students.",
+  },
+  {
+    period: "Sep 2014 – Dec 2021",
+    title: "Scientific Researcher · Metrology and Energy Systems Laboratory, Monastir",
+    description:
+      "Computer-vision and image-processing algorithms in C++ / OpenCV and C# / EmguCV. Heuristic pattern analysis across a 1,250-image dataset, and tooling for 3D reconstruction.",
+  },
 ];

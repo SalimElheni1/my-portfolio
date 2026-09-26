@@ -12,12 +12,14 @@ export type Profile = {
   linkedin: { label: string; url: string };
   languages: { name: string; level: string }[];
   experienceStartDateISO: string;
+  /** shows the "Available for roles" badge in the header */
+  showAvailability: boolean;
 };
 
 export const profile: Profile = {
   name: "Salim Elhani",
   title: "Full-Stack JavaScript Developer",
-  location: "Tunisia",
+  location: "Sfax, Tunisia",
   availability: "Open to remote, hybrid, or relocation-friendly opportunities",
   tagline: "I build software that solves real problems.",
   supportingText:
@@ -26,7 +28,10 @@ export const profile: Profile = {
     "Full-stack JavaScript developer with 4+ years of production experience building and maintaining client-facing web applications in a small, fast-moving product team. Backend-oriented, with day-to-day work across MeteorJS, Node.js, MongoDB, and REST APIs. Delivered a calendar integration system, Stripe and Chargebee billing workflows, D3.js data visualizations, IndexedDB-based offline handling, and a Cypress end-to-end test suite protecting critical checkout and onboarding flows. Outside of employment, independently designed, shipped, and maintains an open-source Electron desktop application now in daily production use at a real organization. Earlier career in computer-vision research and university teaching.",
   email: "elheni.selim@gmail.com",
   phone: "+216 41 578 854",
-  github: { label: "github.com/SalimElheni1", url: "https://github.com/SalimElheni1" },
+  github: {
+    label: "github.com/SalimElheni1",
+    url: "https://github.com/SalimElheni1",
+  },
   linkedin: {
     label: "linkedin.com/in/salimelheni1",
     url: "https://linkedin.com/in/salimelheni1",
@@ -37,4 +42,5 @@ export const profile: Profile = {
     { name: "English", level: "Professional working proficiency" },
   ],
   experienceStartDateISO: "2022-06-01",
+  showAvailability: true,
 };

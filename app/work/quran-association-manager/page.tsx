@@ -42,7 +42,7 @@ export default function ProjectPage() {
             href={project.repoUrl}
             target="_blank"
             rel="noreferrer"
-            className="border-b border-accent-dim pb-0.5 font-display text-sm font-medium text-accent-ink transition-colors hover:border-accent-bright hover:text-accent-bright"
+            className="border-b border-accent-dim pb-0.5 font-display text-sm font-medium text-accent-ink transition-colors hover:border-accent-bright hover:text-ink"
           >
             View repository →
           </a>
@@ -135,7 +135,7 @@ export default function ProjectPage() {
             Want to talk about this project, or something similar?{" "}
             <Link
               href="/#contact"
-              className="border-b border-accent-dim pb-0.5 text-accent-ink transition-colors hover:border-accent-bright hover:text-accent-bright"
+              className="border-b border-accent-dim pb-0.5 text-accent-ink transition-colors hover:border-accent-bright hover:text-ink"
             >
               Get in touch
             </Link>

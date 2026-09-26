@@ -1,41 +1,51 @@
 import type { Metadata } from "next";
-import { Instrument_Sans, Source_Serif_4, IBM_Plex_Mono, Reem_Kufi } from "next/font/google";
+import { Epilogue, Hanken_Grotesk, JetBrains_Mono, Reem_Kufi } from "next/font/google";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import "./globals.css";
 
-const instrumentSans = Instrument_Sans({
-  variable: "--font-instrument-sans",
+const epilogue = Epilogue({
+  variable: "--font-epilogue",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["600", "700"],
 });
 
-const sourceSerif = Source_Serif_4({
-  variable: "--font-source-serif",
+const hanken = Hanken_Grotesk({
+  variable: "--font-hanken",
   subsets: ["latin"],
-  weight: ["400", "600"],
+  weight: ["400"],
 });
 
-const ibmPlexMono = IBM_Plex_Mono({
-  variable: "--font-ibm-plex-mono",
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: ["400", "500", "700"],
 });
 
 const reemKufi = Reem_Kufi({
   variable: "--font-reem-kufi",
   subsets: ["arabic"],
-  weight: ["400"],
+  weight: ["500"],
 });
+
+const description =
+  "Full-stack JavaScript developer in Monastir and Sfax, Tunisia. Four years of production work across backend logic, payment and calendar integrations, front end, and automated end-to-end testing.";
 
 export const metadata: Metadata = {
   title: {
     default: "Salim Elhani — Full-Stack JavaScript Developer",
     template: "%s · Salim Elhani",
   },
-  description:
-    "Full-Stack JavaScript Developer focused on building practical products, improving systems, and turning ideas into working software.",
+  description,
+  openGraph: {
+    type: "website",
+    title: "Salim Elhani — Full-Stack JavaScript Developer",
+    description:
+      "Four years of production JavaScript. Creator of Quran Association Manager, an offline-first desktop system in daily use.",
+    // TODO: add a 1200x630 og:image once a square lockup exists (handoff open item)
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -43,13 +53,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${instrumentSans.variable} ${sourceSerif.variable} ${ibmPlexMono.variable} ${reemKufi.variable} h-full antialiased`}
+      data-scroll-behavior="smooth"
+      className={`${epilogue.variable} ${hanken.variable} ${jetbrainsMono.variable} ${reemKufi.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col font-body text-md leading-relaxed">
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+      <body className="flex min-h-full flex-col font-body text-[15.5px] leading-[1.6]">
+        <ThemeProvider>
           <a
             href="#main-content"
-            className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-accent focus:px-4 focus:py-2 focus:font-display focus:font-medium focus:text-on-accent"
+            className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-accent focus:px-4 focus:py-2 focus:font-display focus:font-semibold focus:text-on-accent"
           >
             Skip to content
           </a>

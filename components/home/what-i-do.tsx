@@ -1,30 +1,50 @@
 import { SectionHeading } from "@/components/section-heading";
+import { CodeIcon, FocusIcon, ShieldCheckIcon } from "@/components/icons";
 
 const items = [
   {
     title: "Build",
-    description: "Full-stack web applications and backend systems, from data modelling to the interface.",
+    description:
+      "Full-stack web applications and desktop tooling, from relational data modeling through to the interface.",
+    Icon: CodeIcon,
   },
   {
     title: "Integrate and test",
     description:
-      "Payment and billing integrations, calendar workflows, and automated end-to-end test coverage.",
+      "Payment and subscription systems, calendar synchronization, and automated end-to-end coverage with Cypress.",
+    Icon: ShieldCheckIcon,
   },
   {
-    title: "Maintain and improve",
-    description: "Legacy modernization, performance, and long-term production support.",
+    title: "Maintain and modernize",
+    description:
+      "Working in an established Meteor and Blaze codebase: refactoring toward component patterns, fixing memory leaks, and supporting live systems.",
+    Icon: FocusIcon,
   },
 ];
 
 export function WhatIDo() {
   return (
-    <section aria-labelledby="what-i-do-heading" className="wrap py-14 sm:py-20">
-      <SectionHeading id="what-i-do-heading">What I do</SectionHeading>
-      <div className="mt-8 grid gap-8 sm:grid-cols-3 sm:gap-10">
-        {items.map((item) => (
-          <div key={item.title} className="border-t border-rule pt-5">
-            <h3 className="font-display text-xl font-medium text-heading">{item.title}</h3>
-            <p className="mt-3 text-base leading-relaxed text-muted">{item.description}</p>
+    <section id="about" aria-labelledby="what-i-do-heading" className="flex flex-col gap-6">
+      <SectionHeading
+        id="what-i-do-heading"
+        eyebrow="02 / Engineering disciplines"
+        meta="Specification to runtime"
+      >
+        What I do
+      </SectionHeading>
+      <div className="flex flex-wrap gap-5">
+        {items.map(({ title, description, Icon }) => (
+          <div
+            key={title}
+            className="flex flex-[1_1_300px] flex-col gap-4 rounded-md bg-surface p-6 shadow-card ring-1 ring-inset ring-line"
+          >
+            <span className="flex size-[46px] items-center justify-center rounded-sm bg-apill-bg text-accent-ink ring-1 ring-inset ring-line2">
+              <Icon size={18} />
+            </span>
+            <div>
+              <h3 className="font-display text-lg font-semibold leading-[26px] text-ink">{title}</h3>
+              <p className="mt-1.5 text-[15.5px] leading-[1.6] text-body">{description}</p>
+            </div>
           </div>
         ))}
       </div>

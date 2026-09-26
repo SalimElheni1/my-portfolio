@@ -89,7 +89,7 @@ export default function AboutPage() {
             <p className="mt-3 text-base leading-relaxed text-muted">{project.description}</p>
             <Link
               href={`/work/${project.slug}`}
-              className="mt-4 inline-flex border-b border-accent-dim pb-0.5 font-display text-sm font-medium text-accent-ink transition-colors hover:border-accent-bright hover:text-accent-bright"
+              className="mt-4 inline-flex border-b border-accent-dim pb-0.5 font-display text-sm font-medium text-accent-ink transition-colors hover:border-accent-bright hover:text-ink"
             >
               Read the case study →
             </Link>

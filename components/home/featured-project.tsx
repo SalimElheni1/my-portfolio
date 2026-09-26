@@ -3,55 +3,107 @@ import Link from "next/link";
 import { projects } from "@/content/project";
 import { SectionHeading } from "@/components/section-heading";
 import { TagList } from "@/components/tag-list";
+import { ArrowRightIcon } from "@/components/icons";
+
+const chip =
+  "inline-flex items-center gap-[7px] rounded-lg bg-surface2 px-3.5 py-[3px] font-mono text-[11px] font-medium leading-4 ring-1 ring-inset ring-line2";
 
 export function FeaturedProject() {
   const project = projects[0];
   const shot = project.screenshots[0];
   const facts = [
     { label: "First commit", value: project.timeline.firstCommit },
-    { label: "First release", value: project.timeline.firstRelease },
+    { label: "First production release", value: `${project.timeline.firstRelease} (18 days)` },
     { label: "Current release", value: project.timeline.currentRelease },
+    { label: "Architecture", value: project.architectureSummary, accent: true },
   ];
 
   return (
-    <section aria-labelledby="selected-work-heading" className="wrap py-14 sm:py-20">
-      <SectionHeading id="selected-work-heading">Selected work</SectionHeading>
-      <article className="mt-8 grid overflow-hidden rounded-lg border border-accent-dim bg-surface shadow-glow-accent lg:grid-cols-[minmax(0,4fr)_minmax(0,6fr)]">
-        <div className="flex flex-col p-7 sm:p-10">
-          <div className="flex items-center gap-2.5">
-            <span aria-hidden="true" className="inline-block h-2 w-2 rounded-full bg-accent" />
-            <span className="font-mono text-xs text-accent-ink">{project.status}</span>
+    <section id="work" aria-labelledby="selected-work-heading" className="flex flex-col gap-6">
+      <SectionHeading
+        id="selected-work-heading"
+        eyebrow="03 / Selected work"
+        meta="Desktop • In daily use"
+      >
+        Featured project
+      </SectionHeading>
+
+      <article className="flex flex-wrap overflow-hidden rounded-md bg-surface shadow-panel ring-1 ring-inset ring-line">
+        <div className="flex flex-[1_1_380px] flex-col justify-between gap-5 p-[clamp(22px,2.6vw,36px)]">
+          <div className="flex flex-wrap gap-2">
+            <span className={`${chip} text-accent-ink`}>
+              <span aria-hidden="true" className="size-[7px] rounded-full bg-accent" />
+              Open source
+            </span>
+            <span className={`${chip} text-amber`}>In production</span>
           </div>
-          <h3 className="mt-5 font-display text-2xl font-semibold tracking-tight text-heading sm:text-3xl">
-            {project.name}
-          </h3>
-          <p className="mt-4 text-base leading-relaxed text-muted sm:text-lg">{project.description}</p>
-          <TagList items={project.stack} className="mt-6" />
-          <dl className="mt-8 grid gap-3 border-t border-rule pt-6 text-sm">
+
+          <div>
+            <h3 className="font-display text-[clamp(19px,2vw,21px)] font-semibold leading-[1.35] text-ink">
+              {project.name}
+            </h3>
+            <p lang="ar" dir="rtl" className="mt-1 text-left font-arabic text-[13px] font-medium leading-[18px] text-accent-ink">
+              برنامج إدارة الجمعية القرآنية
+            </p>
+          </div>
+
+          <p className="text-[15.5px] leading-[1.6] text-body">
+            {project.description} Students, teachers, classes, attendance, and finances in one local system,
+            built and maintained solo and released continuously since August 2025.
+          </p>
+
+          <TagList items={project.stack} />
+
+          <dl className="flex flex-col gap-[7px] rounded-sm bg-surface3 p-4 ring-1 ring-inset ring-line3">
             {facts.map((fact) => (
-              <div key={fact.label} className="grid grid-cols-[8rem_1fr] gap-4">
+              <div key={fact.label} className="flex items-baseline justify-between gap-4 font-mono text-[11px] font-medium leading-4">
                 <dt className="text-muted">{fact.label}</dt>
-                <dd className="font-mono text-xs text-heading">{fact.value}</dd>
+                <dd className={`text-right ${fact.accent ? "text-accent-ink" : "text-ink"}`}>{fact.value}</dd>
               </div>
             ))}
           </dl>
-          <Link
-            href={`/work/${project.slug}`}
-            className="mt-8 inline-flex w-fit items-center border-b border-accent-dim pb-0.5 font-display text-base font-medium text-accent-ink transition-colors hover:border-accent-bright hover:text-accent-bright"
-          >
-            Read the case study →
-          </Link>
+
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+            <a
+              href={project.repoUrl}
+              target="_blank"
+              rel="noopener"
+              className="inline-flex min-h-11 items-center gap-2 font-display text-sm font-medium leading-5 text-accent-ink hover:underline"
+            >
+              Source on GitHub
+              <ArrowRightIcon size={12} />
+            </a>
+            <Link
+              href={`/work/${project.slug}`}
+              className="inline-flex min-h-11 items-center gap-2 font-display text-sm font-medium leading-5 text-accent-ink hover:underline"
+            >
+              Read the case study
+              <ArrowRightIcon size={12} />
+            </Link>
+          </div>
         </div>
-        <div className="flex items-center border-t border-rule bg-raised p-4 sm:p-6 lg:border-l lg:border-t-0">
-          <div className="w-full overflow-hidden rounded-md border border-border-strong">
-            <Image
-              src={shot.src}
-              alt={shot.alt}
-              width={shot.width}
-              height={shot.height}
-              sizes="(min-width: 1024px) 620px, 100vw"
-              className="h-auto w-full"
-            />
+
+        <div className="flex flex-[1_1_440px] items-center border-l border-line2 bg-mockbody p-[clamp(18px,2vw,24px)]">
+          <div className="w-full overflow-hidden rounded-sm bg-mock ring-1 ring-inset ring-line">
+            <div className="flex items-center gap-2 border-b border-line2 bg-mockbar px-3.5 py-[9px]">
+              <span aria-hidden="true" className="flex gap-1.5">
+                <span className="size-2.5 rounded-full bg-[#b8501f]" />
+                <span className="size-2.5 rounded-full bg-[#f0a92a]" />
+                <span className="size-2.5 rounded-full bg-[#4edea3]" />
+              </span>
+              <span className="flex-1 pr-[54px] text-center font-mono text-[11px] leading-4 text-muted">
+                {project.name} — {project.timeline.currentRelease.split(" ")[0]}
+              </span>
+            </div>
+            <div className="relative aspect-[16/10] min-h-[260px] w-full">
+              <Image
+                src={shot.src}
+                alt={shot.alt}
+                fill
+                sizes="(min-width: 1024px) 560px, 100vw"
+                className="object-cover object-top"
+              />
+            </div>
           </div>
         </div>
       </article>

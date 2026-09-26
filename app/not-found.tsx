@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { primaryButton, secondaryButton } from "@/components/button-styles";
 
 export default function NotFound() {
   return (
@@ -14,13 +15,13 @@ export default function NotFound() {
         <div className="mt-10 flex flex-wrap items-center gap-4">
           <Link
             href="/"
-            className="inline-flex items-center rounded-md border border-accent bg-accent px-6 py-3 font-display text-base font-medium text-on-accent transition-colors hover:border-accent-bright hover:bg-accent-bright active:translate-y-px"
+            className={primaryButton}
           >
             Back to home
           </Link>
           <Link
             href="/work/quran-association-manager"
-            className="inline-flex items-center rounded-md border border-border-strong px-6 py-3 font-display text-base font-medium text-heading transition-colors hover:border-accent-ink hover:text-accent-ink active:translate-y-px"
+            className={secondaryButton}
           >
             See the case study
           </Link>

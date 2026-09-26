@@ -1,190 +1,182 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 /* ============================================================
-   Salim Elhani — brand tokens (dark-mode-first)
-   Source: docs/brand-board/tokens.css v4.0
+   Salim Elhani — design tokens
+   Source: docs/design_handoff_personal_website/README.md
+   Dark is the default; [data-theme="light"] overrides it.
    ============================================================ */
 
 :root {
-  /* ---------- Surfaces (bottom → top) ---------- */
-  --sunken: #060c11;
-  --canvas: #0a1219;
-  --surface: #111c26;
-  --raised: #182632;
+  /* ---------- Handoff tokens (dark) ---------- */
+  --bg: #0f1419;
+  --header: rgba(11, 15, 20, 0.92);
+  --footer: #070b0f;
+  --surface: #151b22;
+  --surface2: #222d38;
+  --surface3: #171c21;
+  --input: #0b0f14;
+  --tile: rgba(14, 19, 24, 0.9);
+  --mock: #0a0f14;
+  --mockbar: #171c21;
+  --mockbody: #0f1419;
 
-  /* ---------- Panel lines ---------- */
-  --hairline: #1e2b36;
-  --rule: #263440;
-  --border-strong: #5e7883;
+  --line: rgba(255, 255, 255, 0.08);
+  --line2: rgba(255, 255, 255, 0.06);
+  --line3: rgba(255, 255, 255, 0.05);
 
-  /* ---------- Text ---------- */
-  --heading: #f4f8f9;
-  --body: #cbd9de;
-  --muted: #a3b5bb;
-  --disabled: #788c94;
-  --on-accent: #0a1219;
+  --ink: #f3f4f6;
+  --body: #cbd5e1;
+  --muted: #94a3b8;
+  --soft: #dee3ea;
 
-  /* ---------- Primary accent: instrument cyan ---------- */
-  --accent: #3fd9c4;
-  --accent-bright: #6fe6d5;
-  --accent-dim: #2aa894;
-  --accent-wash: #12312f;
-  /* text/icons drawn directly on canvas need the AAA-safe ink; on dark
-     canvas cyan already clears it, on light canvas it does not (see .light) */
-  --accent-ink: var(--accent);
+  --accent: #b8501f;
+  --accent-ink: #e8845f;
+  --amber: #f0a92a;
+  --green: #4edea3;
 
-  /* ---------- Secondary accent: signal amber ---------- */
-  --signal: #f2b44c;
-  --signal-bright: #f7c877;
-  --signal-dim: #be8425;
-  --signal-wash: #33260e;
+  --pill-bg: #222d38;
+  --pill-ink: #cbd5e1;
+  --apill-bg: #222d38;
+  --apill-ink: #e8845f;
 
-  /* ---------- Mark petrol — enclosed by the logo letterform only ---------- */
-  --mark: #0b4f6c;
-  /* the seen's fill: petrol inside a light S (dark mode), cyan inside a dark S (light mode) */
-  --logo-seen: var(--mark);
+  --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.45);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  --hero: linear-gradient(
+    180deg,
+    rgba(21, 27, 34, 0.7) 0%,
+    rgba(17, 22, 28, 0.5) 50%,
+    rgba(11, 15, 20, 0.8) 100%
+  );
+  --glow-a: rgba(227, 111, 69, 0.1);
+  --glow-b: rgba(245, 158, 11, 0.05);
 
-  /* ---------- Blueprint blue: prose links, info ---------- */
-  --blue: #7fc0ff;
-  --blue-dim: #2e6fb0;
-  --blue-wash: #0f2438;
-
-  /* ---------- Study surface — reserved, unused until a bounded "other room" exists ---------- */
-  --study-surface: #3a1622;
-  --study-edge: #7a3049;
-  --study-body: #e8d5db;
-  --study-meta: #d3a9b6;
-
-  /* ---------- Functional states ---------- */
-  --success: #5fd98b;
-  --success-wash: #0e2a1a;
-  --warning: #f2b44c;
-  --warning-wash: #33260e;
+  /* ---------- Derived (not in the handoff) ---------- */
+  /* hover state for accent fills, focus ring on form fields */
+  --accent-hover: #9c4117;
+  --border-strong: #475569;
+  --disabled: #7c8ba0;
+  --on-accent: #ffffff;
   --error: #ff9d95;
   --error-wash: #38191a;
-  --info: var(--blue);
-  --info-wash: var(--blue-wash);
-
-  /* legacy aliases some components still read */
-  --background: var(--canvas);
-  --foreground: var(--heading);
-  --accent-foreground: var(--on-accent);
-  --border: var(--rule);
 
   color-scheme: dark;
 }
 
-.light {
-  --sunken: #e3e9ec;
-  --canvas: #f2f5f7;
+[data-theme="light"] {
+  --bg: #f8f9fa;
+  --header: rgba(255, 255, 255, 0.92);
+  --footer: #ffffff;
   --surface: #ffffff;
-  --raised: #e7edf0;
+  --surface2: #f1f5f9;
+  --surface3: #f8fafc;
+  --input: #ffffff;
+  --tile: #ffffff;
+  --mock: #ffffff;
+  --mockbar: #f1f5f9;
+  --mockbody: #f8fafc;
 
-  --hairline: #dde5e8;
-  --rule: #ccd7db;
-  --border-strong: #7c9198;
+  --line: #e2e8f0;
+  --line2: #e2e8f0;
+  --line3: #eef2f6;
 
-  --heading: #0a1219;
-  --body: #24303a;
-  --muted: #3b4d57;
-  --disabled: #64767e;
+  --ink: #0f172a;
+  --body: #334155;
+  --muted: #5b6b7f;
+  --soft: #334155;
 
-  /* cyan fails AAA on a near-white ground; petrol carries text/icon duty instead */
-  --accent-ink: var(--mark);
-  --logo-seen: var(--accent);
+  --accent: #b4471a;
+  --accent-ink: #a53f13;
+  --amber: #8a5a06;
+  --green: #047857;
 
-  --background: var(--canvas);
-  --foreground: var(--heading);
-  --border: var(--rule);
+  --pill-bg: #f1f5f9;
+  --pill-ink: #334155;
+  --apill-bg: #fdf1ec;
+  --apill-ink: #a53f13;
+
+  --shadow-lg: 0 20px 25px -5px rgba(15, 23, 42, 0.08);
+  --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.06);
+  --hero: linear-gradient(180deg, #ffffff 0%, #fdfdfe 50%, #f8f9fa 100%);
+  --glow-a: #fdf1ec;
+  --glow-b: rgba(217, 119, 6, 0.06);
+
+  --accent-hover: #9a3b12;
+  --border-strong: #94a3b8;
+  --disabled: #64748b;
+  --error: #b42318;
+  --error-wash: #fef3f2;
 
   color-scheme: light;
 }
 
 @theme inline {
-  --color-sunken: var(--sunken);
-  --color-canvas: var(--canvas);
+  /* handoff names */
+  --color-bg: var(--bg);
+  --color-header: var(--header);
+  --color-footer: var(--footer);
   --color-surface: var(--surface);
-  --color-raised: var(--raised);
-
-  --color-hairline: var(--hairline);
-  --color-rule: var(--rule);
-  --color-border-strong: var(--border-strong);
-
-  --color-heading: var(--heading);
+  --color-surface2: var(--surface2);
+  --color-surface3: var(--surface3);
+  --color-input: var(--input);
+  --color-tile: var(--tile);
+  --color-mock: var(--mock);
+  --color-mockbar: var(--mockbar);
+  --color-mockbody: var(--mockbody);
+  --color-line: var(--line);
+  --color-line2: var(--line2);
+  --color-line3: var(--line3);
+  --color-ink: var(--ink);
   --color-body: var(--body);
   --color-muted: var(--muted);
+  --color-soft: var(--soft);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-hover: var(--accent-hover);
+  --color-amber: var(--amber);
+  --color-green: var(--green);
+  --color-pill-bg: var(--pill-bg);
+  --color-pill-ink: var(--pill-ink);
+  --color-apill-bg: var(--apill-bg);
+  --color-apill-ink: var(--apill-ink);
+  --color-glow-a: var(--glow-a);
+  --color-glow-b: var(--glow-b);
+  --color-border-strong: var(--border-strong);
   --color-disabled: var(--disabled);
   --color-on-accent: var(--on-accent);
-
-  --color-accent: var(--accent);
-  --color-accent-bright: var(--accent-bright);
-  --color-accent-dim: var(--accent-dim);
-  --color-accent-wash: var(--accent-wash);
-  --color-accent-ink: var(--accent-ink);
-
-  --color-signal: var(--signal);
-  --color-signal-bright: var(--signal-bright);
-  --color-signal-dim: var(--signal-dim);
-  --color-signal-wash: var(--signal-wash);
-
-  --color-mark: var(--mark);
-  --color-logo-seen: var(--logo-seen);
-
-  --color-blue: var(--blue);
-  --color-blue-dim: var(--blue-dim);
-  --color-blue-wash: var(--blue-wash);
-
-  --color-study: var(--study-surface);
-  --color-study-edge: var(--study-edge);
-  --color-study-body: var(--study-body);
-  --color-study-meta: var(--study-meta);
-
-  --color-success: var(--success);
-  --color-success-wash: var(--success-wash);
-  --color-warning: var(--warning);
-  --color-warning-wash: var(--warning-wash);
   --color-error: var(--error);
   --color-error-wash: var(--error-wash);
-  --color-info: var(--info);
-  --color-info-wash: var(--info-wash);
 
-  /* legacy aliases */
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-border: var(--border);
+  /* aliases so the case-study and About pages keep working */
+  --color-canvas: var(--bg);
+  --color-sunken: var(--input);
+  --color-raised: var(--surface2);
+  --color-hairline: var(--line2);
+  --color-rule: var(--line);
+  --color-heading: var(--ink);
+  --color-accent-bright: var(--accent-hover);
+  --color-accent-dim: var(--accent);
+  --color-success: var(--green);
 
-  --font-display: var(--font-instrument-sans), system-ui, sans-serif;
-  --font-body: var(--font-source-serif), Georgia, serif;
-  --font-mono: var(--font-ibm-plex-mono), ui-monospace, monospace;
+  --font-display: var(--font-epilogue), system-ui, sans-serif;
+  --font-body: var(--font-hanken), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
   --font-arabic: var(--font-reem-kufi), sans-serif;
-  /* legacy alias: existing markup still uses font-serif / font-sans */
-  --font-serif: var(--font-body);
-  --font-sans: var(--font-display);
 
+  --radius-xs: 2px;
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
-  --radius-xl: 20px;
 
-  --shadow-elev-1: 0 1px 2px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(244, 248, 249, 0.04);
-  --shadow-elev-2: 0 2px 6px rgba(0, 0, 0, 0.5), 0 8px 24px rgba(0, 0, 0, 0.32),
-    inset 0 1px 0 rgba(244, 248, 249, 0.05);
-  --shadow-elev-3: 0 12px 40px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(244, 248, 249, 0.06);
-  --shadow-glow-accent: 0 0 0 1px var(--color-accent-dim), 0 0 20px -4px rgba(63, 217, 196, 0.4);
-  --shadow-glow-signal: 0 0 0 1px var(--color-signal-dim), 0 0 20px -4px rgba(242, 180, 76, 0.35);
+  --shadow-card: var(--shadow-md);
+  --shadow-panel: var(--shadow-lg);
 
-  --ease-out: cubic-bezier(0.2, 0, 0, 1);
-
-  /* ---------- Type scale (1.25 · major third, 16px root) ---------- */
+  /* ---------- Type scale (used by the About and case-study pages) ---------- */
   --text-2xs: 0.75rem;
   --text-2xs--line-height: 1.5;
-  --text-2xs--letter-spacing: 0.01em;
   --text-xs: 0.875rem;
   --text-xs--line-height: 1.5;
-  --text-xs--letter-spacing: 0.01em;
   --text-sm: 0.9375rem;
   --text-sm--line-height: 1.6;
   --text-base: 1rem;
@@ -208,22 +200,22 @@
 
   --tracking-tighter: -0.03em;
   --tracking-tight: -0.02em;
-  --tracking-normal: 0em;
-  --tracking-wide: 0.01em;
 
-  --leading-tight: 1.05;
-  --leading-snug: 1.2;
-  --leading-normal: 1.45;
-  --leading-relaxed: 1.65;
+  --animate-se-pulse: se-pulse 2.4s ease-in-out infinite;
 }
 
 /* ============================================================
    Base
    ============================================================ */
 
+html {
+  scroll-behavior: smooth;
+  scrollbar-color: var(--border-strong) transparent;
+}
+
 body {
-  background: var(--color-canvas);
-  color: var(--color-body);
+  background: var(--bg);
+  color: var(--body);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -234,73 +226,63 @@ h4,
 h5,
 h6 {
   font-family: var(--font-display);
-  color: var(--color-heading);
+  color: var(--ink);
   text-wrap: balance;
 }
 
 p {
   max-width: 68ch;
+  text-wrap: pretty;
 }
 
 ::selection {
-  background: var(--color-accent-dim);
-  color: var(--color-on-accent);
+  background: var(--accent);
+  color: var(--on-accent);
 }
 
-html {
-  scrollbar-color: var(--color-border-strong) transparent;
-  scroll-padding-top: 5rem;
+/* every anchored section lands below the sticky header */
+[id] {
+  scroll-margin-top: 88px;
 }
 
-/* tabular numerals belong to data (dates, versions), not running text */
 time,
 .font-mono {
   font-variant-numeric: tabular-nums;
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 3px;
+  outline: 2px solid var(--accent-ink);
+  outline-offset: 2px;
+}
+
+@keyframes se-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.8);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
+    animation: none !important;
     transition-duration: 0.01ms !important;
   }
 }
 
-/* Tick rule — the one recurring brand ornament. Used once per page. */
-.tick-rule {
-  height: 12px;
-  border-bottom: 1px solid var(--color-rule);
-  background-image: repeating-linear-gradient(to right, var(--color-rule) 0 1px, transparent 1px 16px);
-  background-position: bottom;
-  background-repeat: repeat-x;
-  background-size: 16px 6px;
-}
-
-/* Shared page gutter: header, sections, and footer all hang off one edge. */
+/* Page gutter: max 1200px, 16px to 48px sides */
 @utility wrap {
   width: 100%;
-  max-width: 72rem;
+  max-width: 1200px;
   margin-inline: auto;
-  padding-inline: 1.5rem;
-  @media (min-width: 40rem) {
-    padding-inline: 2.5rem;
-  }
-}
-
-/* The one authored motion moment: the project path draws in step by step. */
-@keyframes step-in {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-}
-
-.step-in {
-  animation: step-in 0.7s var(--ease-out) backwards;
+  padding-inline: clamp(16px, 3vw, 48px);
 }

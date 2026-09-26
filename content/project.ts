@@ -4,6 +4,8 @@ export type Project = {
   status: string;
   repoUrl: string;
   stack: string[];
+  /** one-line architecture summary for the featured-project fact table */
+  architectureSummary: string;
   timeline: {
     firstCommit: string;
     firstRelease: string;
@@ -26,7 +28,8 @@ export const projects: Project[] = [
     name: "Quran Association Manager",
     status: "Open Source · In Production",
     repoUrl: "https://github.com/SalimElheni1/quran-association-manager",
-    stack: ["Electron", "React", "SQLite"],
+    stack: ["Electron.js", "React", "SQLite", "Arabic RTL"],
+    architectureSummary: "Local-first, offline SQLite storage",
     timeline: {
       firstCommit: "9 Aug 2025",
       firstRelease: "v1.0.0 — 27 Aug 2025",
