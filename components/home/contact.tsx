@@ -8,14 +8,14 @@ const rowBase =
 
 const links = [
   { Icon: MailIcon, value: profile.email, category: "Email", href: `mailto:${profile.email}` },
-  { Icon: GithubIcon, value: profile.github.label, category: "Code", href: profile.github.url, external: true },
-  { Icon: LinkedinIcon, value: profile.linkedin.label, category: "Network", href: profile.linkedin.url, external: true },
+  { Icon: GithubIcon, value: profile.github.label, category: "GitHub", href: profile.github.url, external: true },
+  { Icon: LinkedinIcon, value: profile.linkedin.label, category: "LinkedIn", href: profile.linkedin.url, external: true },
 ];
 
 export function Contact() {
   return (
     <section id="contact" aria-labelledby="contact-heading" className="flex flex-col gap-6">
-      <SectionHeading id="contact-heading" eyebrow="06 / Contact">
+      <SectionHeading id="contact-heading" eyebrow="Contact">
         Let&apos;s build something useful.
       </SectionHeading>
 

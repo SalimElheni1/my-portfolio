@@ -5,7 +5,7 @@ const items = [
   {
     title: "Build",
     description:
-      "Full-stack web applications and desktop tooling, from relational data modeling through to the interface.",
+      "Full-stack web applications and an offline-first desktop app, from the data layer through to the interface.",
     Icon: CodeIcon,
   },
   {
@@ -17,7 +17,7 @@ const items = [
   {
     title: "Maintain and modernize",
     description:
-      "Working in an established Meteor and Blaze codebase: refactoring toward component patterns, fixing memory leaks, and supporting live systems.",
+      "Maintaining live MeteorJS and Blaze products, and helping migrate a legacy PHP platform to MeteorJS/React and Next.js.",
     Icon: FocusIcon,
   },
 ];
@@ -27,8 +27,7 @@ export function WhatIDo() {
     <section id="about" aria-labelledby="what-i-do-heading" className="flex flex-col gap-6">
       <SectionHeading
         id="what-i-do-heading"
-        eyebrow="02 / Engineering disciplines"
-        meta="Specification to runtime"
+        eyebrow="Focus"
       >
         What I do
       </SectionHeading>

@@ -18,6 +18,10 @@ const navLinks = [
 
 type SectionId = (typeof navLinks)[number]["id"];
 
+const navLinkBase =
+  "flex min-h-10 items-center rounded-lg px-3 font-mono text-[13px] font-medium leading-[18px] tracking-[0.26px] transition-colors hover:text-ink sm:px-4";
+const navLinkActive = "bg-surface2 text-accent-ink ring-1 ring-inset ring-line";
+
 /** A section becomes active once it crosses the vertical middle of the viewport. */
 function useScrollSpy(enabled: boolean) {
   const [active, setActive] = useState<SectionId>("home");
@@ -49,8 +53,8 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-line2 bg-header backdrop-blur-[24px]">
-      <div className="wrap flex flex-wrap items-center justify-between gap-3.5 py-3">
-        <Link href="/" aria-label="Salim Elhani, home" className="flex items-center gap-3.5">
+      <div className="wrap flex flex-wrap items-center gap-x-3.5 gap-y-2.5 py-3">
+        <Link href="/" aria-label="Salim Elhani, home" className="mr-auto flex items-center gap-3.5">
           <Logo className="h-[38px] w-[21px] shrink-0" />
           <span className="flex flex-col">
             <span className="font-display text-base font-medium leading-[22px] tracking-[-0.4px] text-ink">
@@ -66,32 +70,40 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <div className="flex flex-wrap items-center gap-3">
-          <nav
-            aria-label="Primary"
-            className="flex gap-1 rounded-lg bg-surface p-1 ring-1 ring-inset ring-line2"
+        {/* Below sm the nav drops to its own full-width row; name and actions share the first. */}
+        <nav
+          aria-label="Primary"
+          className="order-last flex w-full justify-between gap-1 rounded-lg bg-surface p-1 ring-1 ring-inset ring-line2 sm:order-none sm:w-auto sm:justify-start"
+        >
+          {navLinks.map((link) => {
+            const isActive = isHome && active === link.id;
+            return (
+              <Link
+                key={link.id}
+                href={`/#${link.id}`}
+                onClick={() => setActive(link.id)}
+                aria-current={isActive ? "page" : undefined}
+                className={cn(
+                  navLinkBase,
+                  // the logo already links home, so small screens skip this item
+                  link.id === "home" && "hidden sm:flex",
+                  isActive ? navLinkActive : "text-muted",
+                )}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
+          <Link
+            href="/about"
+            aria-current={pathname === "/about" ? "page" : undefined}
+            className={cn(navLinkBase, pathname === "/about" ? navLinkActive : "text-muted")}
           >
-            {navLinks.map((link) => {
-              const isActive = isHome && active === link.id;
-              return (
-                <Link
-                  key={link.id}
-                  href={`/#${link.id}`}
-                  onClick={() => setActive(link.id)}
-                  aria-current={isActive ? "page" : undefined}
-                  className={cn(
-                    "flex min-h-10 items-center rounded-lg px-4 font-mono text-[13px] font-medium leading-[18px] tracking-[0.26px] transition-colors hover:text-ink",
-                    isActive
-                      ? "bg-surface2 text-accent-ink ring-1 ring-inset ring-line"
-                      : "text-muted",
-                  )}
-                >
-                  {link.label}
-                </Link>
-              );
-            })}
-          </nav>
+            About
+          </Link>
+        </nav>
 
+        <div className="flex items-center gap-3">
           {profile.showAvailability && (
             <p className="hidden items-center gap-2 rounded-lg bg-surface px-4 py-[5px] font-mono text-[11px] font-medium leading-4 tracking-[0.44px] text-muted ring-1 ring-inset ring-line2 sm:flex">
               <span aria-hidden="true" className="size-2 animate-se-pulse rounded-full bg-green" />

@@ -41,7 +41,7 @@ export const experience: ExperienceItem[] = [
           "Built and maintain a Cypress end-to-end test suite covering critical checkout and onboarding flows, reducing regressions before releases.",
           "Developed client-facing features including onboarding flows, interactive UI components, file uploads, and D3.js data visualizations.",
           "Improved application responsiveness and offline reliability through IndexedDB-based local data handling.",
-          "Delivered a React Native Android MVP for internal product validation, built with AI-assisted development under full personal code review, debugging, and iteration.",
+          "Delivered a React Native Android MVP supporting internal product validation, from prototype through to working build.",
         ],
       },
       {
@@ -61,7 +61,7 @@ export const experience: ExperienceItem[] = [
     location: "Monastir, Tunisia",
     period: "Sep 2014 – Dec 2021",
     highlights: [
-      "Developed computer-vision and image-processing algorithms in C++/OpenCV and C#/EmguCV, including heuristic pattern analysis across a 1,250-image dataset and 3D reconstruction work.",
+      "Developed computer-vision and image-processing algorithms in C++ / OpenCV and C# / EmguCV, including heuristic pattern analysis across a 1,250-image dataset and 3D reconstruction work.",
       "Applied research programming in a laboratory environment, building the analytical and problem-solving foundation later carried into software development.",
     ],
   },
@@ -70,7 +70,7 @@ export const experience: ExperienceItem[] = [
     organization: "National Engineering School of Monastir",
     location: "Monastir, Tunisia",
     period: "Sep 2016 – Jun 2020",
-    highlights: ["Taught electronics, image processing, peripheral interfacing, and VHDL to 300+ engineering students."],
+    highlights: ["Taught electronics, image processing, peripheral interfacing, and VHDL to engineering students. Mentored 300+ students."],
   },
   {
     role: "Volunteer Member",
@@ -111,35 +111,35 @@ export type PathItem = {
 /** Home-page "Path" section, newest first; dates follow the Master Profile §3. */
 export const path: PathItem[] = [
   {
-    period: "Jun 2022 – present",
+    period: "Jun 2022 – Present",
     title: "Full-Stack JavaScript Developer · PerfectSoft, Sfax",
     description:
       "Small product team serving two client products. Ownership spans backend logic, integrations, front end, and automated testing.",
     current: true,
   },
   {
-    period: "Aug 2025 – present",
+    period: "Aug 2025 – Present",
     title: "Creator and maintainer · Quran Association Manager",
     description:
-      "Personal open-source project. Architecture, packaging, and continuous release of a desktop system in daily use.",
+      "Personal project, source available on GitHub. Architecture, packaging, and continuous release of a desktop system in daily use.",
     current: true,
   },
   {
     period: "Aug – Dec 2021",
     title: "Full Stack JS Web Developer Bootcamp · CrocoCoder & CORP, remote",
     description:
-      "Deliberate move out of academia and into software: modern JavaScript, component patterns, REST APIs, relational and document databases.",
-  },
-  {
-    period: "Sep 2016 – Jun 2020",
-    title: "University Teacher · National Engineering School of Monastir",
-    description:
-      "Taught electronics, image processing, peripheral interfacing, and VHDL to engineering students. Mentored 300+ students.",
+      "Deliberate move out of academia and into software development.",
   },
   {
     period: "Sep 2014 – Dec 2021",
     title: "Scientific Researcher · Metrology and Energy Systems Laboratory, Monastir",
     description:
       "Computer-vision and image-processing algorithms in C++ / OpenCV and C# / EmguCV. Heuristic pattern analysis across a 1,250-image dataset, and tooling for 3D reconstruction.",
+  },
+  {
+    period: "Sep 2016 – Jun 2020",
+    title: "University Teacher · National Engineering School of Monastir",
+    description:
+      "Taught electronics, image processing, peripheral interfacing, and VHDL to engineering students. Mentored 300+ students.",
   },
 ];

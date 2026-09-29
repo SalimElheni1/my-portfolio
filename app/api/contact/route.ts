@@ -66,7 +66,7 @@ export async function POST(request: Request) {
   if (!RESEND_API_KEY) {
     console.error("RESEND_API_KEY is not set.");
     return NextResponse.json(
-      { ok: false, error: "The contact form isn't configured yet. Please email directly instead." },
+      { ok: false, error: "The contact form isn't configured yet." },
       { status: 500 },
     );
   }
@@ -90,7 +90,7 @@ export async function POST(request: Request) {
     const details = await emailResponse.text();
     console.error("Resend API error:", emailResponse.status, details);
     return NextResponse.json(
-      { ok: false, error: "Something went wrong sending your message. Please email directly instead." },
+      { ok: false, error: "Something went wrong sending your message." },
       { status: 502 },
     );
   }

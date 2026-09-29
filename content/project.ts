@@ -26,9 +26,9 @@ export const projects: Project[] = [
   {
     slug: "quran-association-manager",
     name: "Quran Association Manager",
-    status: "Open Source · In Production",
+    status: "Source Available · In Production",
     repoUrl: "https://github.com/SalimElheni1/quran-association-manager",
-    stack: ["Electron.js", "React", "SQLite", "Arabic RTL"],
+    stack: ["Electron.js", "React", "SQLite"],
     architectureSummary: "Local-first, offline SQLite storage",
     timeline: {
       firstCommit: "9 Aug 2025",
@@ -51,7 +51,7 @@ export const projects: Project[] = [
       "Backup workflows for local data safety",
     ],
     hardest:
-      "Arabic right-to-left support and role-based access control were the two hardest parts of the build.",
+      "The financial module. Student fees are charged automatically each month and each academic year. Every receipt and payment voucher gets its own sequential number, and cash payments above 500 TND are refused, since Tunisian law requires a cheque or bank transfer above that amount. The hardest part is reporting: the association needs its financial reports in fixed formats and layouts, such as a cash ledger with a running balance, exported to Excel and Word. This module is still being extended as new report formats are requested.",
     outcome:
       "Shipped from first commit to first production release in 18 days, then maintained across 20+ releases over the following year in response to real user feedback — now in daily use at the association.",
     screenshots: [
@@ -75,7 +75,7 @@ export const projects: Project[] = [
       },
       {
         src: "/work/quran-association-manager/classes.webp",
-        alt: "Class management with teacher assignment and prayer-time-based scheduling",
+        alt: "Class management with teacher assignment",
         width: 1600,
         height: 827,
       },

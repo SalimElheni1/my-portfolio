@@ -1,14 +1,14 @@
 import type { ReactNode } from "react";
 
 type SectionHeadingProps = {
-  /** e.g. "02 / Engineering disciplines" */
+  /** e.g. "Selected work" */
   eyebrow?: string;
   id?: string;
   meta?: string;
   children: ReactNode;
 };
 
-/** Header pattern repeated on sections 02 to 06: eyebrow and H2 left, mono meta right, rule below. */
+/** Header pattern repeated on every home section after the hero: eyebrow and H2 left, mono meta right, rule below. */
 export function SectionHeading({ eyebrow, id, meta, children }: SectionHeadingProps) {
   return (
     <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-2 border-b border-line2 pb-3.5">

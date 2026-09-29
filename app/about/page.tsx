@@ -80,7 +80,7 @@ export default function AboutPage() {
         </section>
 
         <section aria-labelledby="project-heading" className="mt-20">
-          <SectionHeading id="project-heading">Open-source project</SectionHeading>
+          <SectionHeading id="project-heading">Personal project</SectionHeading>
           <div className="mt-8">
             <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
               <h3 className="font-display text-lg font-medium text-heading">{project.name}</h3>

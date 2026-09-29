@@ -5,7 +5,7 @@ import { TagList } from "@/components/tag-list";
 export function Skills() {
   return (
     <section aria-labelledby="stack-heading" className="flex flex-col gap-6">
-      <SectionHeading id="stack-heading" eyebrow="04 / Stack matrix" meta="Grouped by depth of use">
+      <SectionHeading id="stack-heading" eyebrow="Skills" meta="Grouped by depth of use">
         Tools and technologies
       </SectionHeading>
       <div className="divide-y divide-line2 rounded-md bg-surface px-[26px] shadow-card ring-1 ring-inset ring-line">

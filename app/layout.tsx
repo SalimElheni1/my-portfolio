@@ -3,6 +3,7 @@ import { Epilogue, Hanken_Grotesk, JetBrains_Mono, Reem_Kufi } from "next/font/g
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
+import { profile } from "@/content/profile";
 import "./globals.css";
 
 const epilogue = Epilogue({
@@ -30,7 +31,7 @@ const reemKufi = Reem_Kufi({
 });
 
 const description =
-  "Full-stack JavaScript developer in Monastir and Sfax, Tunisia. Four years of production work across backend logic, payment and calendar integrations, front end, and automated end-to-end testing.";
+  `Full-stack JavaScript developer in ${profile.location}. 4+ years of production work across backend logic, payment and calendar integrations, front end, and automated end-to-end testing.`;
 
 export const metadata: Metadata = {
   title: {
@@ -42,8 +43,7 @@ export const metadata: Metadata = {
     type: "website",
     title: "Salim Elhani — Full-Stack JavaScript Developer",
     description:
-      "Four years of production JavaScript. Creator of Quran Association Manager, an offline-first desktop system in daily use.",
-    // TODO: add a 1200x630 og:image once a square lockup exists (handoff open item)
+      "4+ years of production JavaScript. Creator of Quran Association Manager, an offline-first desktop system in daily use.",
   },
   twitter: { card: "summary_large_image" },
 };

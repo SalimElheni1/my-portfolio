@@ -22,7 +22,7 @@ export function FeaturedProject() {
     <section id="work" aria-labelledby="selected-work-heading" className="flex flex-col gap-6">
       <SectionHeading
         id="selected-work-heading"
-        eyebrow="03 / Selected work"
+        eyebrow="Selected work"
         meta="Desktop • In daily use"
       >
         Featured project
@@ -33,7 +33,7 @@ export function FeaturedProject() {
           <div className="flex flex-wrap gap-2">
             <span className={`${chip} text-accent-ink`}>
               <span aria-hidden="true" className="size-[7px] rounded-full bg-accent" />
-              Open source
+              Source available
             </span>
             <span className={`${chip} text-amber`}>In production</span>
           </div>
@@ -95,7 +95,7 @@ export function FeaturedProject() {
                 {project.name} — {project.timeline.currentRelease.split(" ")[0]}
               </span>
             </div>
-            <div className="relative aspect-[16/10] min-h-[260px] w-full">
+            <div className="relative w-full" style={{ aspectRatio: `${shot.width} / ${shot.height}` }}>
               <Image
                 src={shot.src}
                 alt={shot.alt}

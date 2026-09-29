@@ -11,7 +11,7 @@ const degrees = education.slice(1);
 export function Timeline() {
   return (
     <section aria-labelledby="path-heading" className="flex flex-col gap-6">
-      <SectionHeading id="path-heading" eyebrow="05 / Path">
+      <SectionHeading id="path-heading" eyebrow="Path">
         Computer vision to production JavaScript
       </SectionHeading>
 

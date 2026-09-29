@@ -14,6 +14,10 @@ const excludedTerms = [
   "Doctorate",
   "Dr. Salim",
   "Quran Branch Manager",
+  // the project's license is non-commercial, so "open source" would be inaccurate
+  "open source",
+  "open-source",
+  "Open Source",
 ];
 
 describe("content integrity", () => {
