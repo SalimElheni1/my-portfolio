@@ -13,7 +13,7 @@ export function FeaturedProject() {
   const shot = project.screenshots[0];
   const facts = [
     { label: "First commit", value: project.timeline.firstCommit },
-    { label: "First production release", value: `${project.timeline.firstRelease} (18 days)` },
+    { label: "First production release", value: `${project.timeline.firstRelease} (17 days)` },
     { label: "Current release", value: project.timeline.currentRelease },
     { label: "Architecture", value: project.architectureSummary, accent: true },
   ];

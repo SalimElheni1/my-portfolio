@@ -18,6 +18,8 @@ export type EducationItem = {
   credential: string;
   institution: string;
   period: string;
+  /** degrees appear in the home-page Education panel; training is listed on the About page */
+  kind: "degree" | "training";
 };
 
 export const experience: ExperienceItem[] = [
@@ -27,21 +29,22 @@ export const experience: ExperienceItem[] = [
     location: "Sfax, Tunisia",
     period: "Jun 2022 – Present",
     summary:
-      "Small product team serving two client products. Ownership spans backend logic, integrations, front end, and automated testing.",
+      "Small product team serving two client products. Ownership spans backend logic, integrations, front end, and automated testing. Fully remote for the first two years, onsite in Sfax since.",
     highlights: [],
     subEntries: [
       {
         name: "Commit Action",
         url: "https://app.commitaction.com",
         description:
-          "Business accountability coaching platform for entrepreneurs and executives.",
+          "Business accountability coaching platform for entrepreneurs and executives. The company reports that its team has helped over 10,000 of them.",
         highlights: [
-          "Designed and implemented a calendar integration system connecting external calendar providers with backend scheduling logic.",
+          "Designed and implemented a calendar integration system connecting Google Calendar, Outlook, and iCloud with backend scheduling logic.",
           "Built Stripe payment and Chargebee subscription workflows supporting billing and product monetization.",
           "Built and maintain a Cypress end-to-end test suite covering critical checkout and onboarding flows, reducing regressions before releases.",
-          "Developed client-facing features including onboarding flows, interactive UI components, file uploads, and D3.js data visualizations.",
+          "Developed client-facing features including onboarding flows (including an interactive onboarding tour), interactive UI components, file uploads with DropzoneJS, and D3.js data visualizations such as a client performance spider chart.",
           "Improved application responsiveness and offline reliability through IndexedDB-based local data handling.",
-          "Delivered a React Native Android MVP supporting internal product validation, from prototype through to working build.",
+          "Building a React Native Android MVP (in progress) for internal product validation.",
+          "Contributed to debugging, code review, technical discussions, and ongoing improvement of development practices.",
         ],
       },
       {
@@ -61,8 +64,9 @@ export const experience: ExperienceItem[] = [
     location: "Monastir, Tunisia",
     period: "Sep 2014 – Dec 2021",
     highlights: [
-      "Developed computer-vision and image-processing algorithms in C++ / OpenCV and C# / EmguCV, including heuristic pattern analysis across a 1,250-image dataset and 3D reconstruction work.",
-      "Applied research programming in a laboratory environment, building the analytical and problem-solving foundation later carried into software development.",
+      "Developed computer-vision and image-processing algorithms in C++ / OpenCV and C# / EmguCV for image-based metrology: spatio-temporal monitoring of Kelvin–Helmholtz instabilities in a free round jet.",
+      "Performed heuristic pattern analysis across a 1,250-image dataset.",
+      "Developed an algorithm reconstructing the 3D axis of a free round jet from 2D image slices, and contributed to a geometric model of the jet.",
     ],
   },
   {
@@ -70,7 +74,7 @@ export const experience: ExperienceItem[] = [
     organization: "National Engineering School of Monastir",
     location: "Monastir, Tunisia",
     period: "Sep 2016 – Jun 2020",
-    highlights: ["Taught electronics, image processing, peripheral interfacing, and VHDL to engineering students. Mentored 300+ students."],
+    highlights: ["Taught electronics, image processing, peripheral interfacing, and VHDL to 300+ engineering students."],
   },
   {
     role: "Volunteer Member",
@@ -84,19 +88,28 @@ export const experience: ExperienceItem[] = [
 
 export const education: EducationItem[] = [
   {
+    credential: "McKinsey.org Forward Program",
+    institution: "McKinsey.org, online",
+    period: "Jun 2026",
+    kind: "training",
+  },
+  {
     credential: "Full Stack JS Web Developer Bootcamp",
     institution: "CrocoCoder & CORP, remote",
     period: "Aug – Dec 2021",
+    kind: "training",
   },
   {
-    credential: "Master's in Electronics and Microelectronics",
+    credential: "Master's in Micro and Nanoelectronics",
     institution: "Faculty of Science, Monastir",
     period: "2011 – 2013",
+    kind: "degree",
   },
   {
     credential: "Bachelor's (Licence) in Physics–Electronics",
     institution: "Faculty of Science, Monastir",
     period: "2008 – 2011",
+    kind: "degree",
   },
 ];
 
@@ -134,12 +147,12 @@ export const path: PathItem[] = [
     period: "Sep 2014 – Dec 2021",
     title: "Scientific Researcher · Metrology and Energy Systems Laboratory, Monastir",
     description:
-      "Computer-vision and image-processing algorithms in C++ / OpenCV and C# / EmguCV. Heuristic pattern analysis across a 1,250-image dataset, and tooling for 3D reconstruction.",
+      "Computer-vision and image-processing algorithms in C++ / OpenCV and C# / EmguCV. Heuristic pattern analysis across a 1,250-image dataset, and 3D reconstruction of a free round jet's axis from 2D image slices.",
   },
   {
     period: "Sep 2016 – Jun 2020",
     title: "University Teacher · National Engineering School of Monastir",
     description:
-      "Taught electronics, image processing, peripheral interfacing, and VHDL to engineering students. Mentored 300+ students.",
+      "Taught electronics, image processing, peripheral interfacing, and VHDL to 300+ engineering students.",
   },
 ];

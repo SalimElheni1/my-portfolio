@@ -5,8 +5,8 @@ import { profile } from "@/content/profile";
 const panel = "rounded-md bg-surface shadow-card ring-1 ring-inset ring-line";
 const label = "font-mono text-[11px] font-medium uppercase leading-4 tracking-[0.12em] text-accent-ink";
 
-// The bootcamp is already a row in the path above; only degrees are listed here.
-const degrees = education.slice(1);
+// Training (bootcamp, McKinsey.org Forward) is covered by the path above and the About page; only degrees are listed here.
+const degrees = education.filter((item) => item.kind === "degree");
 
 export function Timeline() {
   return (

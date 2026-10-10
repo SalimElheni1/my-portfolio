@@ -7,8 +7,8 @@ import { primaryButton, secondaryButton } from "@/components/button-styles";
 const stats = [
   { value: null, tone: "text-accent-ink", label: "Production JavaScript" },
   { value: "2", tone: "text-amber", label: "Client products at PerfectSoft" },
-  { value: "20+", tone: "text-ink", label: "Releases of my desktop app" },
-  { value: "18 days", tone: "text-green", label: "First commit to production" },
+  { value: "2 yrs", tone: "text-ink", label: "Fully remote at PerfectSoft" },
+  { value: "17 days", tone: "text-green", label: "First commit to production" },
 ];
 
 export function Hero() {

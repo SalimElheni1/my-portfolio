@@ -1,3 +1,5 @@
+import { readdirSync, readFileSync } from "node:fs";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { profile } from "./profile";
 import { experience, education } from "./experience";
@@ -20,9 +22,39 @@ const excludedTerms = [
   "Open Source",
 ];
 
+// Wording superseded by Master Profile v3 (7 Oct 2026). Release counts are never published.
+const staleTerms = [
+  "20+",
+  "18 days",
+  "9 Aug 2025",
+  "external calendar providers",
+  "Delivered a React Native",
+  "Mentored 300+",
+  "Electronics and Microelectronics",
+  "Applied research programming",
+  // the program is run by McKinsey.org (Master Profile v4, 10 Oct 2026)
+  "McKinsey & Company",
+];
+
+// Home-page components hold a few hard-coded facts (hero stats, project fact table).
+const homeComponentText = readdirSync(join(__dirname, "../components/home"))
+  .map((file) => readFileSync(join(__dirname, "../components/home", file), "utf8"))
+  .join("\n");
+
 describe("content integrity", () => {
   it.each(excludedTerms)("never mentions excluded term: %s", (term) => {
     expect(allContentText).not.toContain(term);
+  });
+
+  it.each(staleTerms)("never uses superseded wording: %s", (term) => {
+    expect(allContentText).not.toContain(term);
+    expect(homeComponentText).not.toContain(term);
+  });
+
+  it("tags education as degrees and training, so the home panel can show degrees only", () => {
+    const kinds = education.map((item) => item.kind);
+    expect(kinds).toContain("degree");
+    expect(kinds).toContain("training");
   });
 
   it("profile has required non-empty fields", () => {

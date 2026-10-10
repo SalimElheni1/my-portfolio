@@ -31,10 +31,10 @@ export const projects: Project[] = [
     stack: ["Electron.js", "React", "SQLite"],
     architectureSummary: "Local-first, offline SQLite storage",
     timeline: {
-      firstCommit: "9 Aug 2025",
+      firstCommit: "10 Aug 2025",
       firstRelease: "v1.0.0 — 27 Aug 2025",
       currentRelease: "v1.3.1 — 29 Aug 2026",
-      note: "Actively maintained, 20+ releases in the first year, in daily production use at one association branch.",
+      note: "Actively maintained, in daily production use at one association branch since August 2025.",
     },
     description:
       "Offline-first desktop application that replaced paper-based administration for a Quranic association branch.",
@@ -47,13 +47,13 @@ export const projects: Project[] = [
       "Local SQLite storage with no dependency on network connectivity",
       "Authentication and role-based access control",
       "Full Arabic right-to-left interface support",
-      "PDF and Excel export for records and reports",
+      "PDF, Word, and Excel export for records and reports",
       "Backup workflows for local data safety",
     ],
     hardest:
       "The financial module. Student fees are charged automatically each month and each academic year. Every receipt and payment voucher gets its own sequential number, and cash payments above 500 TND are refused, since Tunisian law requires a cheque or bank transfer above that amount. The hardest part is reporting: the association needs its financial reports in fixed formats and layouts, such as a cash ledger with a running balance, exported to Excel and Word. This module is still being extended as new report formats are requested.",
     outcome:
-      "Shipped from first commit to first production release in 18 days, then maintained across 20+ releases over the following year in response to real user feedback — now in daily use at the association.",
+      "Shipped from first commit to first production release in 17 days, then actively maintained in response to real user feedback — now in daily use at the association.",
     screenshots: [
       {
         src: "/work/quran-association-manager/dashboard.webp",
