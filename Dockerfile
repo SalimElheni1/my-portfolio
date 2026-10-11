@@ -24,6 +24,20 @@ FROM base AS deps
 COPY package.json package-lock.json ./
 RUN npm ci
 
+# ---- dev ----
+# Used by docker-compose for local development (`target: dev`): full
+# node_modules (including devDependencies), runs `next dev`, and relies on
+# the compose file bind-mounting the source code so edits on your machine
+# show up immediately without rebuilding the image.
+#
+# Starts FROM deps, so it reuses the same cached `npm ci` layer instead of
+# installing everything a second time.
+FROM deps AS dev
+ENV NODE_ENV=development
+COPY . .
+EXPOSE 3000
+CMD ["npm", "run", "dev"]
+
 # ---- builder ----
 # Has the full source + full node_modules (including devDependencies,
 # needed to run `next build`). Produces .next/standalone.
@@ -33,8 +47,11 @@ COPY . .
 RUN npm run build
 
 # ---- runner (production) ----
-# The image you'd actually deploy. Alpine + only the standalone output:
-# no devDependencies, no full node_modules, no source files, no build tools.
+# The image you'd actually deploy: only the standalone output -- no
+# devDependencies, no full node_modules, no source files, no build tools.
+#
+# Kept as the LAST stage on purpose: a plain `docker build .` (no --target)
+# builds the last stage, so the default image is the production one.
 FROM base AS runner
 ENV NODE_ENV=production
 
@@ -52,17 +69,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 USER nextjs
 EXPOSE 3000
 ENV PORT=3000
+# server.js listens on $HOSTNAME. Docker sets HOSTNAME to the container ID
+# by default, so override it to listen on every network interface.
+ENV HOSTNAME=0.0.0.0
 CMD ["node", "server.js"]
-
-# ---- dev ----
-# Used by docker-compose for local development: full node_modules
-# (including devDependencies), runs `next dev`, and relies on the compose
-# file bind-mounting the source code so edits on your machine show up
-# immediately without rebuilding the image.
-FROM base AS dev
-ENV NODE_ENV=development
-COPY package.json package-lock.json ./
-RUN npm ci
-COPY . .
-EXPOSE 3000
-CMD ["npm", "run", "dev"]
