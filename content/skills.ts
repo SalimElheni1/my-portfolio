@@ -14,7 +14,7 @@ export const skillTiers: SkillTier[] = [
   },
   {
     label: "Familiar",
-    items: ["React Native", "TypeScript", "Next.js", "PostgreSQL/SQL", "HTML5", "CSS3", "Linux"],
+    items: ["React Native", "TypeScript", "Next.js", "Express.js", "PostgreSQL/SQL", "HTML5", "CSS3", "Linux"],
   },
   {
     label: "Ways of working",
@@ -28,6 +28,6 @@ export const skillTiers: SkillTier[] = [
   },
   {
     label: "Earlier / research era",
-    items: ["C++ with OpenCV", "C# with EmguCV", "VHDL"],
+    items: ["C++ with OpenCV", "C# with EmguCV", "VHDL", "CUDA/GPGPU", "LabVIEW", "MATLAB", "Arduino"],
   },
 ];
