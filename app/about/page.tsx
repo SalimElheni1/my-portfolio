@@ -131,9 +131,6 @@ export default function AboutPage() {
             <a href={`mailto:${profile.email}`} className={linkClass}>
               {profile.email}
             </a>
-            <a href={`tel:${profile.phone.replace(/\s+/g, "")}`} className={linkClass}>
-              {profile.phone}
-            </a>
           </div>
         </section>
       </div>

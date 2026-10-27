@@ -20,6 +20,8 @@ const excludedTerms = [
   "open source",
   "open-source",
   "Open Source",
+  // the phone number stays on the CV PDF only, never on the site
+  "+216",
 ];
 
 // Wording superseded by Master Profile v3 (7 Oct 2026). Release counts are never published.

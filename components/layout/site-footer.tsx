@@ -13,6 +13,14 @@ export function SiteFooter() {
             About
           </Link>
           <span>{profile.title}</span>
+          <a
+            href="https://github.com/SalimElheni1/my-portfolio"
+            target="_blank"
+            rel="noopener"
+            className="transition-colors hover:text-ink"
+          >
+            Built with Next.js · Source
+          </a>
         </p>
       </div>
     </footer>

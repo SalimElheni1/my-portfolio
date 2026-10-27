@@ -7,7 +7,6 @@ export type Profile = {
   supportingText: string;
   summary: string;
   email: string;
-  phone: string;
   github: { label: string; url: string };
   linkedin: { label: string; url: string };
   languages: { name: string; level: string }[];
@@ -27,7 +26,6 @@ export const profile: Profile = {
   summary:
     "Full-stack JavaScript developer with 4+ years of production experience building and maintaining client-facing web applications in a small, fast-moving product team. Backend-oriented, with day-to-day work across MeteorJS, Node.js, MongoDB, and REST APIs. Delivered a Google, Outlook, and iCloud calendar integration system, Stripe and Chargebee billing workflows, D3.js data visualizations, IndexedDB-based offline handling, and a Cypress end-to-end test suite protecting critical checkout and onboarding flows. Outside of employment, independently designed, shipped, and maintains a source-available Electron desktop application now in daily production use at a real organization. Earlier career in computer-vision research and university teaching.",
   email: "elheni.selim@gmail.com",
-  phone: "+216 41 578 854",
   github: {
     label: "github.com/SalimElheni1",
     url: "https://github.com/SalimElheni1",
