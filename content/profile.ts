@@ -4,6 +4,8 @@ export type Profile = {
   location: string;
   availability: string;
   tagline: string;
+  /** hero stack line, from the Master Profile's first headline option; daily tools get the accent pill */
+  headlineStack: { daily: string[]; shipped: string[] };
   supportingText: string;
   summary: string;
   email: string;
@@ -21,6 +23,7 @@ export const profile: Profile = {
   location: "Tunisia",
   availability: "Open to remote, hybrid, or relocation",
   tagline: "Production JavaScript since 2022, backend first.",
+  headlineStack: { daily: ["Node.js", "MongoDB", "MeteorJS"], shipped: ["React", "Electron"] },
   supportingText:
     "Full-Stack JavaScript Developer focused on building practical products, improving systems, and turning ideas into working software.",
   summary:

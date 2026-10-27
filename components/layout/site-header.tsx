@@ -11,8 +11,8 @@ import { cn } from "@/lib/utils";
 
 const navLinks = [
   { id: "home", label: "Home" },
-  { id: "about", label: "What I do" },
   { id: "work", label: "Work" },
+  { id: "experience", label: "Experience" },
   { id: "contact", label: "Contact" },
 ] as const;
 

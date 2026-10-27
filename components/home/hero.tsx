@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { profile } from "@/content/profile";
+import { projects } from "@/content/project";
 import { formatYearsExperience } from "@/lib/date";
 import { ArrowRightIcon, GithubIcon, LinkedinIcon, MailIcon } from "@/components/icons";
-import { primaryButton, secondaryButton } from "@/components/button-styles";
+import { iconButton, primaryButton, secondaryButton } from "@/components/button-styles";
+import { TagList } from "@/components/tag-list";
 
 const stats = [
   { value: null, tone: "text-accent-ink", label: "Production JavaScript" },
@@ -40,12 +42,16 @@ export function Hero() {
           <p className="font-mono text-[clamp(11px,1.1vw,13px)] font-bold uppercase leading-[1.4] tracking-[0.1em] text-accent-ink">
             {profile.title}
           </p>
+          <div className="flex flex-wrap gap-[7px]">
+            <TagList items={profile.headlineStack.daily} tone="accent" />
+            <TagList items={profile.headlineStack.shipped} />
+          </div>
           <p className="max-w-[60ch] text-[clamp(15px,1.5vw,18px)] leading-[1.62] text-body">
-            {experience} building production JavaScript: backend logic, payment and calendar integrations,
+            {experience} building production JavaScript at PerfectSoft: backend logic, payment and calendar integrations,
             front end, and automated end-to-end testing. Based in {profile.location}.
           </p>
           <div className="flex flex-wrap gap-2.5">
-            <Link href="/#work" className={primaryButton}>
+            <Link href={`/work/${projects[0].slug}`} className={primaryButton}>
               View the case study
               <ArrowRightIcon size={12} />
             </Link>
@@ -53,13 +59,11 @@ export function Hero() {
               <MailIcon size={14} />
               Get in touch
             </Link>
-            <a href={profile.github.url} target="_blank" rel="noopener" className={secondaryButton}>
-              <GithubIcon size={14} />
-              GitHub
+            <a href={profile.github.url} target="_blank" rel="noopener" aria-label="GitHub" className={iconButton}>
+              <GithubIcon size={16} />
             </a>
-            <a href={profile.linkedin.url} target="_blank" rel="noopener" className={secondaryButton}>
-              <LinkedinIcon size={14} />
-              LinkedIn
+            <a href={profile.linkedin.url} target="_blank" rel="noopener" aria-label="LinkedIn" className={iconButton}>
+              <LinkedinIcon size={16} />
             </a>
           </div>
         </div>
