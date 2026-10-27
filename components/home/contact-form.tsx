@@ -8,12 +8,12 @@ type Status = "idle" | "submitting" | "success" | "error";
 const fieldClassName =
   "w-full rounded-[5px] border border-line bg-input px-3.5 font-body text-[15px] text-ink transition-colors placeholder:text-disabled hover:border-border-strong focus:border-accent-ink disabled:opacity-60";
 
-const labelClassName = "font-mono text-[11px] font-medium uppercase leading-4 tracking-[0.06em] text-muted";
+const labelClassName =
+  "font-mono text-[11px] font-medium uppercase leading-4 tracking-[0.06em] text-muted";
 
 const subjects = [
   { value: "full-time", label: "Full-time role" },
   { value: "contract", label: "Contract or freelance" },
-  { value: "desktop", label: "Desktop / offline-first application" },
   { value: "other", label: "Something else" },
 ];
 
@@ -42,7 +42,9 @@ export function ContactForm() {
         form.reset();
       } else {
         setStatus("error");
-        setErrorMessage(result.error || "Something went wrong. Please try again.");
+        setErrorMessage(
+          result.error || "Something went wrong. Please try again.",
+        );
       }
     } catch {
       setStatus("error");
@@ -52,7 +54,10 @@ export function ContactForm() {
 
   if (status === "success") {
     return (
-      <p role="status" className="rounded-[5px] border border-green px-5 py-4 text-[15px] text-ink">
+      <p
+        role="status"
+        className="rounded-[5px] border border-green px-5 py-4 text-[15px] text-ink"
+      >
         Thanks — your message is on its way. I&apos;ll get back to you soon.
       </p>
     );
@@ -65,7 +70,13 @@ export function ContactForm() {
           this one, which flags the submission as spam server-side. */}
       <div className="absolute -left-[9999px]" aria-hidden="true">
         <label htmlFor="company">Company</label>
-        <input type="text" id="company" name="company" tabIndex={-1} autoComplete="off" />
+        <input
+          type="text"
+          id="company"
+          name="company"
+          tabIndex={-1}
+          autoComplete="off"
+        />
       </div>
 
       <div className="flex flex-wrap gap-x-3.5 gap-y-3.5">
@@ -138,7 +149,10 @@ export function ContactForm() {
       {status === "error" && (
         <p role="alert" className="text-sm leading-5 text-error">
           {errorMessage} Or email me directly at{" "}
-          <a href={`mailto:${profile.email}`} className="underline underline-offset-2">
+          <a
+            href={`mailto:${profile.email}`}
+            className="underline underline-offset-2"
+          >
             {profile.email}
           </a>
           .

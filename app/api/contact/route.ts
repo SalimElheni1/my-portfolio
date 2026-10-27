@@ -1,9 +1,6 @@
 import { NextResponse } from "next/server";
 import { profile } from "@/content/profile";
 
-// Route Handlers only ever run on the server, so this is a safe place to
-// read a secret. It must be set in the deployment environment (and in
-// .env.local for local dev) — see .env.example.
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 
 // Resend's unverified/sandbox mode only allows delivery to the exact email
@@ -17,7 +14,6 @@ const CONTACT_TO_EMAIL = process.env.CONTACT_TO_EMAIL || profile.email;
 const SUBJECTS: Record<string, string> = {
   "full-time": "Full-time role",
   contract: "Contract or freelance",
-  desktop: "Desktop / offline-first application",
   other: "Something else",
 };
 
@@ -32,7 +28,10 @@ export async function POST(request: Request) {
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ ok: false, error: "Invalid request." }, { status: 400 });
+    return NextResponse.json(
+      { ok: false, error: "Invalid request." },
+      { status: 400 },
+    );
   }
 
   const name = typeof body.name === "string" ? body.name.trim() : "";
@@ -50,17 +49,26 @@ export async function POST(request: Request) {
   }
 
   if (!name || !email || !message) {
-    return NextResponse.json({ ok: false, error: "Please fill in every field." }, { status: 400 });
+    return NextResponse.json(
+      { ok: false, error: "Please fill in every field." },
+      { status: 400 },
+    );
   }
   if (!isValidEmail(email)) {
-    return NextResponse.json({ ok: false, error: "That email address doesn't look right." }, { status: 400 });
+    return NextResponse.json(
+      { ok: false, error: "That email address doesn't look right." },
+      { status: 400 },
+    );
   }
   if (
     name.length > MAX_LENGTHS.name ||
     email.length > MAX_LENGTHS.email ||
     message.length > MAX_LENGTHS.message
   ) {
-    return NextResponse.json({ ok: false, error: "One of the fields is too long." }, { status: 400 });
+    return NextResponse.json(
+      { ok: false, error: "One of the fields is too long." },
+      { status: 400 },
+    );
   }
 
   if (!RESEND_API_KEY) {
