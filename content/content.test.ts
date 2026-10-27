@@ -57,12 +57,6 @@ describe("content integrity", () => {
     expect(homeComponentText).not.toContain(term);
   });
 
-  it("tags education as degrees and training, so the home panel can show degrees only", () => {
-    const kinds = education.map((item) => item.kind);
-    expect(kinds).toContain("degree");
-    expect(kinds).toContain("training");
-  });
-
   it("profile has required non-empty fields", () => {
     expect(profile.name).toBeTruthy();
     expect(profile.email).toBeTruthy();

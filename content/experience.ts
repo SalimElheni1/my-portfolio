@@ -18,8 +18,6 @@ export type EducationItem = {
   credential: string;
   institution: string;
   period: string;
-  /** degrees appear in the home-page Education panel; training is listed on the About page */
-  kind: "degree" | "training";
 };
 
 export const experience: ExperienceItem[] = [
@@ -91,25 +89,21 @@ export const education: EducationItem[] = [
     credential: "McKinsey.org Forward Program",
     institution: "McKinsey.org, online",
     period: "Jun 2026",
-    kind: "training",
   },
   {
     credential: "Full Stack JS Web Developer Bootcamp",
     institution: "CrocoCoder & CORP, remote",
     period: "Aug – Dec 2021",
-    kind: "training",
   },
   {
     credential: "Master's in Micro and Nanoelectronics",
     institution: "Faculty of Science, Monastir",
     period: "2011 – 2013",
-    kind: "degree",
   },
   {
     credential: "Bachelor's (Licence) in Physics–Electronics",
     institution: "Faculty of Science, Monastir",
     period: "2008 – 2011",
-    kind: "degree",
   },
 ];
 
@@ -147,7 +141,7 @@ export const path: PathItem[] = [
     period: "Sep 2014 – Dec 2021",
     title: "Scientific Researcher · Metrology and Energy Systems Laboratory, Monastir",
     description:
-      "Computer-vision and image-processing algorithms in C++ / OpenCV and C# / EmguCV. Heuristic pattern analysis across a 1,250-image dataset, and 3D reconstruction of a free round jet's axis from 2D image slices.",
+      "Computer-vision and image-processing research in C++ / OpenCV and C# / EmguCV.",
   },
   {
     period: "Sep 2016 – Jun 2020",

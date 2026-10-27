@@ -1,13 +1,9 @@
+import Link from "next/link";
 import { SectionHeading } from "@/components/section-heading";
-import { education, path } from "@/content/experience";
-import { profile } from "@/content/profile";
+import { path } from "@/content/experience";
+import { ArrowRightIcon } from "@/components/icons";
 
-const panel = "rounded-md bg-surface shadow-card ring-1 ring-inset ring-line";
-const label = "font-mono text-[11px] font-medium uppercase leading-4 tracking-[0.12em] text-accent-ink";
-
-// Training (bootcamp, McKinsey.org Forward) is covered by the path above and the About page; only degrees are listed here.
-const degrees = education.filter((item) => item.kind === "degree");
-
+// Education and languages live on the About page only, so the home page stays on the work.
 export function Timeline() {
   return (
     <section aria-labelledby="path-heading" className="flex flex-col gap-6">
@@ -15,7 +11,7 @@ export function Timeline() {
         Computer vision to production JavaScript
       </SectionHeading>
 
-      <ol className={`${panel} divide-y divide-line2`}>
+      <ol className="divide-y divide-line2 rounded-md bg-surface shadow-card ring-1 ring-inset ring-line">
         {path.map((item) => (
           <li key={item.title} className="flex flex-wrap gap-x-7 gap-y-2 px-[26px] py-[22px]">
             <time
@@ -31,30 +27,13 @@ export function Timeline() {
         ))}
       </ol>
 
-      <div className="flex flex-wrap gap-5">
-        <div className={`${panel} flex flex-[1_1_300px] flex-col gap-4 p-6`}>
-          <h3 className={label}>Education</h3>
-          {degrees.map((item) => (
-            <div key={item.credential}>
-              <p className="font-display text-base font-semibold leading-[22px] text-ink">{item.credential}</p>
-              <p className="font-mono text-xs leading-[18px] text-muted">
-                {item.institution} · {item.period.replace(" – ", "–")}
-              </p>
-            </div>
-          ))}
-        </div>
-        <div className={`${panel} flex flex-[1_1_300px] flex-col gap-4 p-6`}>
-          <h3 className={label}>Languages</h3>
-          {profile.languages.map((lang) => (
-            <div key={lang.name} className="flex items-baseline justify-between gap-4">
-              <p className="font-display text-base font-semibold leading-[22px] text-ink">{lang.name}</p>
-              <p className="font-mono text-xs leading-[18px] text-muted">
-                {lang.level.replace(" proficiency", "")}
-              </p>
-            </div>
-          ))}
-        </div>
-      </div>
+      <Link
+        href="/about"
+        className="inline-flex min-h-11 items-center gap-2 self-start font-display text-sm font-medium leading-5 text-accent-ink hover:underline"
+      >
+        Education, languages, and full experience
+        <ArrowRightIcon size={12} />
+      </Link>
     </section>
   );
 }
