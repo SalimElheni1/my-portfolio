@@ -36,6 +36,8 @@ const staleTerms = [
   "Applied research programming",
   // the program is run by McKinsey.org (Master Profile v4, 10 Oct 2026)
   "McKinsey & Company",
+  // v1.4.0 replaces it as the production release (decided 25 Oct 2026, Master Profile update pending)
+  "v1.3.1",
 ];
 
 // Home-page components hold a few hard-coded facts (hero stats, project fact table).

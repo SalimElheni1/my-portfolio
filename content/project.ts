@@ -22,6 +22,9 @@ export type Project = {
   screenshots: { src: string; alt: string; width: number; height: number }[];
 };
 
+/** Stand-in until v1.4.0 ships to the association; a production build refuses to run while it is present. */
+export const RELEASE_DATE_PENDING = "date TBD";
+
 export const projects: Project[] = [
   {
     slug: "quran-association-manager",
@@ -33,7 +36,7 @@ export const projects: Project[] = [
     timeline: {
       firstCommit: "10 Aug 2025",
       firstRelease: "v1.0.0 — 27 Aug 2025",
-      currentRelease: "v1.3.1 — 29 Aug 2026",
+      currentRelease: `v1.4.0 — ${RELEASE_DATE_PENDING}`,
       note: "Actively maintained, in daily production use at one association branch since August 2025.",
     },
     description:
@@ -88,3 +91,7 @@ export const projects: Project[] = [
     ],
   },
 ];
+
+if (process.env.NODE_ENV === "production" && JSON.stringify(projects).includes(RELEASE_DATE_PENDING)) {
+  throw new Error(`content/project.ts still says "${RELEASE_DATE_PENDING}" — set the real v1.4.0 release date before deploying.`);
+}
