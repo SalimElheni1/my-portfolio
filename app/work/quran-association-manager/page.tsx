@@ -11,6 +11,7 @@ const project = projects[0];
 export const metadata: Metadata = {
   title: project.name,
   description: project.description,
+  alternates: { canonical: `/work/${project.slug}` },
 };
 
 const facts = [

@@ -7,6 +7,7 @@ import { SectionHeading } from "@/components/section-heading";
 
 export const metadata: Metadata = {
   title: "About",
+  alternates: { canonical: "/about" },
   description: `About ${profile.name}, a ${profile.title.toLowerCase()} based in ${profile.location}.`,
 };
 

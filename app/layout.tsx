@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/theme/theme-provider";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { profile } from "@/content/profile";
+import { siteUrl } from "@/lib/site";
 import "./globals.css";
 
 const epilogue = Epilogue({
@@ -34,6 +35,7 @@ const description =
   `Full-stack JavaScript developer in ${profile.location}. 4+ years of production work across backend logic, payment and calendar integrations, front end, and automated end-to-end testing.`;
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: {
     default: "Salim Elhani — Full-Stack JavaScript Developer",
     template: "%s · Salim Elhani",
