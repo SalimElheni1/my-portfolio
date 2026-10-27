@@ -38,6 +38,8 @@ const staleTerms = [
   "McKinsey & Company",
   // v1.4.0 replaces it as the production release (decided 25 Oct 2026, Master Profile update pending)
   "v1.3.1",
+  // the project was built with AI coding agents, so "solo" overstates it (25 Oct 2026)
+  "maintained solo",
 ];
 
 // Home-page components hold a few hard-coded facts (hero stats, project fact table).
@@ -81,6 +83,11 @@ describe("content integrity", () => {
       "Ways of working",
       "Earlier / research era",
     ]);
+  });
+
+  it("says openly how the featured project was built", () => {
+    expect(projects[0].howBuilt).toContain("AI coding agents");
+    expect(projects[0].role).toContain("AI coding agents");
   });
 
   it("has exactly one featured project", () => {

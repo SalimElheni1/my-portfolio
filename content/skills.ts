@@ -19,7 +19,7 @@ export const skillTiers: SkillTier[] = [
   {
     label: "Ways of working",
     items: [
-      "AI-assisted development (Claude Code) with personal code review and debugging",
+      "AI-assisted development (Claude Code), with personal code review and debugging at PerfectSoft",
       "End-to-end testing",
       "Code review",
       "Release stability",

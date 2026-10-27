@@ -134,7 +134,7 @@ export const path: PathItem[] = [
     period: "Aug 2025 – Present",
     title: "Creator and maintainer · Quran Association Manager",
     description:
-      "Personal project, source available on GitHub. Architecture, packaging, and continuous release of a desktop system in daily use.",
+      "Personal project, source available on GitHub. Product owner and technical lead of a desktop system in daily use, built with AI coding agents.",
     current: true,
   },
   {

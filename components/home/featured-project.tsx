@@ -49,7 +49,7 @@ export function FeaturedProject() {
 
           <p className="text-[15.5px] leading-[1.6] text-body">
             {project.description} Students, teachers, classes, attendance, and finances in one local system,
-            built and maintained solo and released continuously since August 2025.
+            built and maintained with AI coding agents under my direction, and released continuously since August 2025.
           </p>
 
           <TagList items={project.stack} />
