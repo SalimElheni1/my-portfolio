@@ -1,3 +1,5 @@
+import { projects } from "./project";
+
 export type ExperienceItem = {
   role: string;
   organization: string;
@@ -125,7 +127,7 @@ export const path: PathItem[] = [
     current: true,
   },
   {
-    period: "Aug 2025 – Present",
+    period: projects[0].period,
     title: "Creator and maintainer · Quran Association Manager",
     description:
       "Personal project, source available on GitHub. Product owner and technical lead of a desktop system in daily use, built with AI coding agents.",

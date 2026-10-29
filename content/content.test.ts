@@ -93,6 +93,11 @@ describe("content integrity", () => {
     expect(projects[0].role).toContain("AI coding agents");
   });
 
+  it("dates the project from its first commit", () => {
+    const [, month, year] = projects[0].timeline.firstCommit.split(" ");
+    expect(projects[0].period).toMatch(new RegExp(`^${month} ${year} `));
+  });
+
   it("has exactly one featured project", () => {
     expect(projects).toHaveLength(1);
     expect(projects[0].name).toBe("Quran Association Manager");

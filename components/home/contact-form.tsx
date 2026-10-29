@@ -67,13 +67,15 @@ export function ContactForm() {
     <form onSubmit={handleSubmit} className="flex flex-col gap-3.5" noValidate>
       {/* Honeypot: invisible to real visitors, hidden from screen readers and
           keyboard tab order. Bots that auto-fill every field tend to fill
-          this one, which flags the submission as spam server-side. */}
+          this one, which flags the submission as spam server-side. Its name
+          and label avoid words like "company" that browsers autofill, since
+          autoComplete="off" alone doesn't stop them. */}
       <div className="absolute -left-[9999px]" aria-hidden="true">
-        <label htmlFor="company">Company</label>
+        <label htmlFor="hp_field">Leave this field empty</label>
         <input
           type="text"
-          id="company"
-          name="company"
+          id="hp_field"
+          name="hp_field"
           tabIndex={-1}
           autoComplete="off"
         />

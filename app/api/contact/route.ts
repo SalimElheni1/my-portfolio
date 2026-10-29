@@ -21,6 +21,8 @@ const SUBJECTS: Record<string, string> = {
 const MAX_LENGTHS = { name: 100, email: 200, message: 5000 };
 
 const HOUR = 60 * 60 * 1000;
+// Give up on Resend after this long, rather than leave the visitor waiting.
+const RESEND_TIMEOUT_MS = 10_000;
 
 // Only messages that are about to be sent count. Each visitor gets a few an
 // hour, and the daily cap holds even when addresses are faked, so a flood
@@ -47,17 +49,22 @@ export async function POST(request: Request) {
     );
   }
 
-  const name = typeof body.name === "string" ? body.name.trim() : "";
+  // The name goes into the email's subject line, so line breaks and other
+  // control characters become plain spaces.
+  const name = typeof body.name === "string" ? body.name.replace(/[\s\p{Cc}]+/gu, " ").trim() : "";
   const email = typeof body.email === "string" ? body.email.trim() : "";
   const message = typeof body.message === "string" ? body.message.trim() : "";
   const subjectKey = typeof body.subject === "string" ? body.subject : "";
-  const subject = SUBJECTS[subjectKey] ?? SUBJECTS.other;
+  // hasOwn, so keys every object inherits (like "constructor") aren't taken for subjects.
+  const subject = Object.hasOwn(SUBJECTS, subjectKey) ? SUBJECTS[subjectKey] : SUBJECTS.other;
   // Honeypot: a field real visitors never see or fill in (hidden via CSS).
   // Bots that auto-fill every input tend to fill it — if it's non-empty,
   // pretend success without actually sending anything.
-  const honeypot = typeof body.company === "string" ? body.company.trim() : "";
+  const honeypot = typeof body.hp_field === "string" ? body.hp_field.trim() : "";
 
   if (honeypot) {
+    // Logged, so a real message caught here by mistake doesn't vanish without a trace.
+    console.warn("Contact form honeypot was filled in; message discarded.");
     return NextResponse.json({ ok: true });
   }
 
@@ -93,7 +100,8 @@ export async function POST(request: Request) {
   }
 
   // Visitor first, so someone already blocked doesn't use up the daily cap.
-  const retryAfterMs = perVisitor(clientIp(request.headers)) || perDay("all");
+  const visitor = clientIp(request.headers);
+  const retryAfterMs = perVisitor.hit(visitor) || perDay.hit("all");
   if (retryAfterMs) {
     return NextResponse.json(
       { ok: false, error: "Too many messages right now. Please try again later." },
@@ -101,24 +109,37 @@ export async function POST(request: Request) {
     );
   }
 
-  const emailResponse = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${RESEND_API_KEY}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from: "Portfolio Contact Form <onboarding@resend.dev>",
-      to: [CONTACT_TO_EMAIL],
-      reply_to: email,
-      subject: `${subject}: new message from ${name} (via portfolio site)`,
-      text: `From: ${name} <${email}>\nSubject: ${subject}\n\n${message}`,
-    }),
-  });
+  let emailResponse: Response | undefined;
+  try {
+    emailResponse = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${RESEND_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: "Portfolio Contact Form <onboarding@resend.dev>",
+        to: [CONTACT_TO_EMAIL],
+        reply_to: email,
+        subject: `${subject}: new message from ${name} (via portfolio site)`,
+        text: `From: ${name} <${email}>\nSubject: ${subject}\n\n${message}`,
+      }),
+      signal: AbortSignal.timeout(RESEND_TIMEOUT_MS),
+    });
+  } catch (error) {
+    // Resend couldn't be reached, or didn't answer in time.
+    console.error("Resend request failed:", error);
+  }
 
-  if (!emailResponse.ok) {
-    const details = await emailResponse.text();
-    console.error("Resend API error:", emailResponse.status, details);
+  if (!emailResponse?.ok) {
+    if (emailResponse) {
+      const details = await emailResponse.text().catch(() => "");
+      console.error("Resend API error:", emailResponse.status, details);
+    }
+    // Nothing was sent, so it doesn't count: otherwise a Resend outage would
+    // lock visitors out after a few retries.
+    perVisitor.release(visitor);
+    perDay.release("all");
     return NextResponse.json(
       { ok: false, error: "Something went wrong sending your message." },
       { status: 502 },

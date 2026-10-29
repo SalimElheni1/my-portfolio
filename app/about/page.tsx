@@ -85,7 +85,7 @@ export default function AboutPage() {
           <div className="mt-8">
             <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
               <h3 className="font-display text-lg font-medium text-heading">{project.name}</h3>
-              <span className="shrink-0 font-mono text-xs text-muted">Aug 2025 – Present</span>
+              <span className="shrink-0 font-mono text-xs text-muted">{project.period}</span>
             </div>
             <p className="mt-3 text-base leading-relaxed text-muted">{project.description}</p>
             <Link

@@ -34,3 +34,5 @@ jobs:
       - run: npm run build
         env:
           SITE_URL: https://example.com
+      # The production image builds separately, with SITE_URL passed in as a build argument.
+      - run: docker build --target runner --build-arg SITE_URL=https://example.com .

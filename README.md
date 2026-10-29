@@ -12,7 +12,7 @@ Personal portfolio of [Salim Elhani](https://github.com/SalimElheni1), a Full-St
 
 - **Custom design system** — Epilogue headlines, Hanken Grotesk body copy, JetBrains Mono metadata, and Reem Kufi for the Arabic text, on a near-black/off-white palette with a single burnt-orange accent. Dark by default, with a light theme one click away (`next-themes`): the choice is remembered, with no flash on load.
 - **One real case study, told honestly** — [Quran Association Manager](https://github.com/SalimElheni1/quran-association-manager), an offline-first Electron app in daily production use, written up around its context, key decisions and their trade-offs, architecture, what went wrong, and how it was built (with AI coding agents, as product owner and technical lead). No placeholder or concept projects.
-- **Working contact form** — a Next.js Route Handler (`app/api/contact`) backed by [Resend](https://resend.com), with server-side validation, a honeypot against basic spam, rate limits (5 messages per visitor per hour, 20 in total per day), and a real success/error UI (never a fake success state) with a `mailto:` fallback.
+- **Working contact form** — a Next.js Route Handler (`app/api/contact`) backed by [Resend](https://resend.com), with server-side validation, a honeypot against basic spam, rate limits (5 messages per visitor per hour, 20 in total per day, counted in the server's memory; failed sends don't count), and a real success/error UI (never a fake success state) with a `mailto:` fallback.
 - **Typed content layer** — most copy lives in `content/*.ts`, and a Vitest guard (`content/content.test.ts`) fails CI if stale or invented facts creep back into it or the home-page components.
 - **Stays current on its own** — pages are prerendered, then refreshed at most once a day, so figures based on dates (years of experience, the footer year) move on without a redeploy.
 - **Search and sharing** — sitemap, `robots.txt`, canonical links, Person structured data, and a link preview for every page; the case study gets its own preview image.
@@ -80,6 +80,8 @@ docker compose down
 docker build --target runner --build-arg SITE_URL=https://example.com -t my-portfolio:prod .
 docker run -p 3000:3000 --env-file .env.local my-portfolio:prod
 ```
+
+In production, put a reverse proxy such as nginx or Caddy in front of the container. The contact form's rate limit tells visitors apart by the address the proxy adds to `X-Forwarded-For`. Without a proxy, visitors can send a made-up address and get around the per-visitor limit.
 
 ## Project structure
 

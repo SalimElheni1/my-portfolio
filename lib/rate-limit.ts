@@ -6,13 +6,14 @@ type Options = { limit: number; windowMs: number; maxKeys?: number };
  * long-running server such as the Docker image; on serverless hosts each
  * instance counts on its own, so there it only slows bursts down.
  *
- * The returned function records one attempt for `key` and returns how many
- * milliseconds to wait before the next one, or 0 when this one is allowed.
+ * `hit` records one attempt for `key` and returns how many milliseconds to
+ * wait before the next one, or 0 when this one is allowed. `release` takes
+ * back an allowed attempt that didn't go through, so it doesn't count.
  */
 export function createRateLimiter({ limit, windowMs, maxKeys = 10_000 }: Options) {
   const windows = new Map<string, Window>();
 
-  return function hit(key: string, now: number = Date.now()): number {
+  function hit(key: string, now: number = Date.now()): number {
     const current = windows.get(key);
     if (current && now < current.resetAt) {
       if (current.count >= limit) return current.resetAt - now;
@@ -27,15 +28,26 @@ export function createRateLimiter({ limit, windowMs, maxKeys = 10_000 }: Options
     }
     windows.set(key, { count: 1, resetAt: now + windowMs });
     return 0;
-  };
+  }
+
+  function release(key: string, now: number = Date.now()): void {
+    const current = windows.get(key);
+    if (current && now < current.resetAt && current.count > 0) current.count -= 1;
+  }
+
+  return { hit, release };
 }
 
 /**
- * The visitor's address as reported by whatever sits in front of the app:
- * the hosting platform, a reverse proxy, or Next.js itself, which fills in
- * the connection's address when nothing else did. A visitor can fake it
- * wherever nothing in front overwrites the header, so never rely on it alone.
+ * The visitor's address as the nearest proxy in front of the app saw it.
+ * Reverse proxies such as nginx and Caddy put the address they got the
+ * request from at the end of x-forwarded-for; anything before it came from
+ * the visitor and can be made up. Next.js only fills the header in when it's
+ * missing, so with no proxy in front a visitor can still fake it: run the
+ * production image behind one. If a CDN sits in front of that proxy, tell
+ * the proxy to trust it, or every visitor ends up sharing the CDN's address.
  */
 export function clientIp(headers: Headers): string {
-  return headers.get("x-forwarded-for")?.split(",")[0].trim() || headers.get("x-real-ip") || "unknown";
+  const nearest = headers.get("x-forwarded-for")?.split(",").at(-1)?.trim();
+  return nearest || headers.get("x-real-ip") || "unknown";
 }

@@ -9,6 +9,8 @@ export type Project = {
   stack: string[];
   /** one-line architecture summary for the featured-project fact table */
   architectureSummary: string;
+  /** shown wherever the project is listed alongside jobs (About page, home-page path) */
+  period: string;
   timeline: {
     firstCommit: string;
     firstRelease: string;
@@ -47,6 +49,7 @@ export const projects: Project[] = [
     videoUrl: "https://drive.google.com/file/d/1CAr6MUztE0QUjr6J46tSPYfbMRLDHYio/view?usp=sharing",
     stack: ["Electron.js", "React", "SQLite"],
     architectureSummary: "Local-first, offline SQLite storage",
+    period: "Aug 2025 – Present",
     timeline: {
       firstCommit: "10 Aug 2025",
       firstRelease: "v1.0.0 — 27 Aug 2025",
