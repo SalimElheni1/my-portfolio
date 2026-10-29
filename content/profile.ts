@@ -1,3 +1,5 @@
+import { formatYearsExperience } from "../lib/date";
+
 export type Profile = {
   name: string;
   title: string;
@@ -26,8 +28,10 @@ export const profile: Profile = {
   headlineStack: { daily: ["Node.js", "MongoDB", "MeteorJS"], shipped: ["React", "Electron"] },
   supportingText:
     "Full-Stack JavaScript Developer focused on building practical products, improving systems, and turning ideas into working software.",
-  summary:
-    "Full-stack JavaScript developer with 4+ years of production experience building and maintaining client-facing web applications in a small, fast-moving product team. Backend-oriented, with day-to-day work across MeteorJS, Node.js, MongoDB, and REST APIs. Delivered a Google, Outlook, and iCloud calendar integration system, Stripe and Chargebee billing workflows, D3.js data visualizations, IndexedDB-based offline handling, and a Cypress end-to-end test suite protecting critical checkout and onboarding flows. Outside of employment, designed, shipped, and maintains a source-available Electron desktop application now in daily production use at a real organization. Earlier career in computer-vision research and university teaching.",
+  // A getter, so the years are counted when a page renders, not once when this file loads.
+  get summary() {
+    return `Full-stack JavaScript developer with ${formatYearsExperience(this.experienceStartDateISO)} of production experience building and maintaining client-facing web applications in a small, fast-moving product team. Backend-oriented, with day-to-day work across MeteorJS, Node.js, MongoDB, and REST APIs. Delivered a Google, Outlook, and iCloud calendar integration system, Stripe and Chargebee billing workflows, D3.js data visualizations, IndexedDB-based offline handling, and a Cypress end-to-end test suite protecting critical checkout and onboarding flows. Outside of employment, designed, shipped, and maintains a source-available Electron desktop application now in daily production use at a real organization. Earlier career in computer-vision research and university teaching.`;
+  },
   email: "elheni.selim@gmail.com",
   github: {
     label: "github.com/SalimElheni1",

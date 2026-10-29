@@ -1,15 +1,15 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { profile } from "@/content/profile";
 import { experience, education } from "@/content/experience";
 import { projects } from "@/content/project";
 import { SectionHeading } from "@/components/section-heading";
+import { pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "About",
-  alternates: { canonical: "/about" },
-  description: `About ${profile.name}, a ${profile.title.toLowerCase()} based in ${profile.location}.`,
-};
+  description: `Experience, education, and languages of ${profile.name}, a full-stack JavaScript developer based in ${profile.location}.`,
+  path: "/about",
+});
 
 const project = projects[0];
 const linkClass = "text-heading transition-colors hover:text-accent-ink";

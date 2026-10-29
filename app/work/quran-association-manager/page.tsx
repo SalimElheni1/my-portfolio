@@ -1,18 +1,18 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { projects } from "@/content/project";
 import { SectionHeading } from "@/components/section-heading";
 import { TagList } from "@/components/tag-list";
 import { ArchitectureDiagram } from "@/components/work/architecture-diagram";
+import { pageMetadata } from "@/lib/site";
 
 const project = projects[0];
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: project.name,
   description: project.description,
-  alternates: { canonical: `/work/${project.slug}` },
-};
+  path: `/work/${project.slug}`,
+});
 
 const facts = [
   { label: "First commit", value: project.timeline.firstCommit },

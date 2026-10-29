@@ -1,6 +1,6 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { profile } from "./profile";
 import { experience, education } from "./experience";
 import { skillTiers } from "./skills";
@@ -55,6 +55,15 @@ describe("content integrity", () => {
   it.each(staleTerms)("never uses superseded wording: %s", (term) => {
     expect(allContentText).not.toContain(term);
     expect(homeComponentText).not.toContain(term);
+  });
+
+  it("counts the years in the summary when it's read, so they never go stale", () => {
+    vi.useFakeTimers({ now: new Date("2027-06-02") });
+    try {
+      expect(profile.summary).toContain("5+ years");
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it("profile has required non-empty fields", () => {

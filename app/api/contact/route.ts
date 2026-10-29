@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { profile } from "@/content/profile";
+import { clientIp, createRateLimiter } from "@/lib/rate-limit";
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 
@@ -18,6 +19,14 @@ const SUBJECTS: Record<string, string> = {
 };
 
 const MAX_LENGTHS = { name: 100, email: 200, message: 5000 };
+
+const HOUR = 60 * 60 * 1000;
+
+// Only messages that are about to be sent count. Each visitor gets a few an
+// hour, and the daily cap holds even when addresses are faked, so a flood
+// can't fill the inbox or use up the Resend quota.
+const perVisitor = createRateLimiter({ limit: 5, windowMs: HOUR });
+const perDay = createRateLimiter({ limit: 20, windowMs: 24 * HOUR });
 
 function isValidEmail(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
@@ -80,6 +89,15 @@ export async function POST(request: Request) {
     return NextResponse.json(
       { ok: false, error: "The contact form isn't configured yet." },
       { status: 500 },
+    );
+  }
+
+  // Visitor first, so someone already blocked doesn't use up the daily cap.
+  const retryAfterMs = perVisitor(clientIp(request.headers)) || perDay("all");
+  if (retryAfterMs) {
+    return NextResponse.json(
+      { ok: false, error: "Too many messages right now. Please try again later." },
+      { status: 429, headers: { "Retry-After": String(Math.ceil(retryAfterMs / 1000)) } },
     );
   }
 

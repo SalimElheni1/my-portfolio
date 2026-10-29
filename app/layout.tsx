@@ -4,7 +4,8 @@ import { ThemeProvider } from "@/components/theme/theme-provider";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { profile } from "@/content/profile";
-import { siteUrl } from "@/lib/site";
+import { formatYearsExperience } from "@/lib/date";
+import { openGraphDefaults, siteUrl } from "@/lib/site";
 import "./globals.css";
 
 const epilogue = Epilogue({
@@ -31,24 +32,32 @@ const reemKufi = Reem_Kufi({
   weight: ["500"],
 });
 
-const description =
-  `Full-stack JavaScript developer in ${profile.location}. 4+ years of production work across backend logic, payment and calendar integrations, front end, and automated end-to-end testing.`;
+// Every page is rebuilt at most once a day, so dates worked out while
+// rendering (years of experience, the footer year) stay current without a
+// redeploy.
+export const revalidate = 86400;
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title: {
-    default: "Salim Elhani — Full-Stack JavaScript Developer",
-    template: "%s · Salim Elhani",
-  },
-  description,
-  openGraph: {
-    type: "website",
-    title: "Salim Elhani — Full-Stack JavaScript Developer",
-    description:
-      "4+ years of production JavaScript. Creator of Quran Association Manager, an offline-first desktop system in daily use.",
-  },
-  twitter: { card: "summary_large_image" },
+const title = {
+  default: "Salim Elhani — Full-Stack JavaScript Developer",
+  template: "%s · Salim Elhani",
 };
+
+export function generateMetadata(): Metadata {
+  const years = formatYearsExperience(profile.experienceStartDateISO);
+  return {
+    metadataBase: new URL(siteUrl),
+    title,
+    description: `Full-stack JavaScript developer in ${profile.location}. ${years} of production work across backend logic, payment and calendar integrations, front end, and automated end-to-end testing.`,
+    openGraph: {
+      ...openGraphDefaults,
+      // the same template, so each page's link preview gets the "· Salim Elhani" suffix too
+      title,
+      description: `${years} of production JavaScript. Creator of Quran Association Manager, an offline-first desktop system in daily use.`,
+      url: "/",
+    },
+    twitter: { card: "summary_large_image" },
+  };
+}
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (

@@ -61,6 +61,10 @@ RUN npm run build
 # builds the last stage, so the default image is the production one.
 FROM base AS runner
 ENV NODE_ENV=production
+# Pages are also re-rendered once a day while the server runs (see
+# app/layout.tsx), so the server needs the same address the build used.
+ARG SITE_URL
+ENV SITE_URL=$SITE_URL
 
 # Next.js's standalone server doesn't need to (and shouldn't) run as root.
 RUN groupadd --system --gid 1001 nodejs \
