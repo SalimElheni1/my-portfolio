@@ -45,10 +45,11 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ### Environment variables
 
-The contact form needs two variables in `.env.local` (never committed — see `.env.example`):
+Set these in `.env.local` (never committed — see `.env.example`):
 
 | Variable | Required for | Notes |
 |---|---|---|
+| `SITE_URL` | Production builds | The site's public address, no trailing slash. It is baked into canonical links, the sitemap, `robots.txt`, and social previews when the pages are prerendered, so it must be set wherever `npm run build` runs (your host's build settings, or `--build-arg` for Docker). The build refuses to run without it; local dev falls back to `http://localhost:3000` |
 | `RESEND_API_KEY` | Sending contact-form emails | Free at [resend.com](https://resend.com), 3,000 emails/month |
 | `CONTACT_TO_EMAIL` | Overriding the delivery inbox | Resend's unverified/sandbox mode only delivers to the address the account is signed up with. Remove this once a domain is bought and verified in Resend — it then falls back to the public email in `content/profile.ts` |
 
@@ -73,8 +74,8 @@ docker compose up -d
 docker compose logs -f
 docker compose down
 
-# Production image
-docker build --target runner -t my-portfolio:prod .
+# Production image. SITE_URL is needed at build time, and .env files never enter the image.
+docker build --target runner --build-arg SITE_URL=https://example.com -t my-portfolio:prod .
 docker run -p 3000:3000 --env-file .env.local my-portfolio:prod
 ```
 

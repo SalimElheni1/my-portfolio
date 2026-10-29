@@ -44,6 +44,13 @@ CMD ["npm", "run", "dev"]
 FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+# The pages are prerendered here, so the public address that goes into
+# canonical links, the sitemap, robots.txt, and social previews has to be
+# known at build time, not only when the container starts. .env files are
+# never copied into the image (.dockerignore), so pass it explicitly:
+#   docker build --build-arg SITE_URL=https://example.com .
+# Without it, the build stops with "SITE_URL is not set".
+ARG SITE_URL
 RUN npm run build
 
 # ---- runner (production) ----

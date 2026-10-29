@@ -24,10 +24,14 @@ function isValidEmail(value: string): boolean {
 }
 
 export async function POST(request: Request) {
-  let body: Record<string, unknown>;
+  let body: Record<string, unknown> | null;
   try {
     body = await request.json();
   } catch {
+    body = null;
+  }
+  // `null` is valid JSON too, so a body that parses can still have no fields.
+  if (!body) {
     return NextResponse.json(
       { ok: false, error: "Invalid request." },
       { status: 400 },
