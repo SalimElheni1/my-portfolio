@@ -12,12 +12,12 @@ Personal portfolio of [Salim Elhani](https://github.com/SalimElheni1), a Full-St
 
 - **Custom design system** — Epilogue headlines, Hanken Grotesk body copy, JetBrains Mono metadata, and Reem Kufi for the Arabic text, on a near-black/off-white palette with a single burnt-orange accent. Dark by default, with a light theme one click away (`next-themes`): the choice is remembered, with no flash on load.
 - **One real case study, told honestly** — [Quran Association Manager](https://github.com/SalimElheni1/quran-association-manager), an offline-first Electron app in daily production use, written up around its context, key decisions and their trade-offs, architecture, what went wrong, and how it was built (with AI coding agents, as product owner and technical lead). No placeholder or concept projects.
-- **Working contact form** — a Next.js Route Handler (`app/api/contact`) backed by [Resend](https://resend.com), with server-side validation, a honeypot against basic spam, rate limits (5 messages per visitor per hour, 20 in total per day, counted in the server's memory; failed sends don't count), and a real success/error UI (never a fake success state) with a `mailto:` fallback.
+- **Working contact form** — a Next.js Route Handler (`app/api/contact`) backed by [Resend](https://resend.com), with server-side validation shared with the form (`lib/contact.ts`), same-origin and JSON-only checks, a honeypot against basic spam, rate limits (5 messages per visitor per hour, 20 in total per day, counted in the server's memory; failed sends don't count), and a real success/error UI (never a fake success state) with a `mailto:` fallback.
 - **Typed content layer** — most copy lives in `content/*.ts`, and a Vitest guard (`content/content.test.ts`) fails CI if stale or invented facts creep back into it or the home-page components.
 - **Stays current on its own** — pages are prerendered, then refreshed at most once a day, so figures based on dates (years of experience, the footer year) move on without a redeploy.
 - **Search and sharing** — sitemap, `robots.txt`, canonical links, Person structured data, and a link preview for every page; the case study gets its own preview image.
 - **Accessible by default** — semantic landmarks, one `h1` per route, visible focus rings, a skip-to-content link, `aria-current` on active nav, and color pairs verified against WCAG AA in both themes.
-- **Dockerized** — a multi-stage `Dockerfile` (small production image via Next.js `standalone` output) plus a `docker-compose.yml` dev environment with hot reload.
+- **Ready for a single VPS** — Next.js `standalone` output run by PM2 behind nginx and Cloudflare, security headers, and a deploy script that builds each release separately and rolls back if it doesn't come up (`deploy/`).
 
 ## Tech stack
 
@@ -29,7 +29,7 @@ Personal portfolio of [Salim Elhani](https://github.com/SalimElheni1), a Full-St
 | Theming | [next-themes](https://github.com/pacocoursey/next-themes) |
 | Email | [Resend](https://resend.com) |
 | Testing | [Vitest](https://vitest.dev) |
-| Containers | Docker + Docker Compose |
+| Hosting | Ubuntu VPS: PM2, nginx, Cloudflare |
 
 ## Getting started
 
@@ -51,9 +51,10 @@ Set these in `.env.local` (never committed — see `.env.example`):
 
 | Variable | Required for | Notes |
 |---|---|---|
-| `SITE_URL` | Production | The site's public address, no trailing slash, used for canonical links, the sitemap, `robots.txt`, and social previews. Pages are prerendered at build time and refreshed once a day while the site runs, so set it in both places: your host's environment variables, or `--build-arg` for Docker, which also keeps it in the image. The build refuses to run without it; local dev falls back to `http://localhost:3000` |
+| `SITE_URL` | Production | The site's public address, no trailing slash, used for canonical links, the sitemap, `robots.txt`, and social previews. Pages are prerendered at build time and refreshed once a day while the site runs, so the build and the running server both need it (`deploy/deploy.sh` reads it from the server's env file for both). The build refuses to run without it; local dev falls back to `http://localhost:3000` |
 | `RESEND_API_KEY` | Sending contact-form emails | Free at [resend.com](https://resend.com), 3,000 emails/month |
 | `CONTACT_TO_EMAIL` | Overriding the delivery inbox | Resend's unverified/sandbox mode only delivers to the address the account is signed up with. Remove this once a domain is bought and verified in Resend — it then falls back to the public email in `content/profile.ts` |
+| `ALLOWED_DEV_ORIGINS` | Dev on other LAN devices | Comma-separated addresses (e.g. a phone at `192.168.1.20`) allowed to load the dev server |
 
 Without `RESEND_API_KEY` set, the site still runs fine — the contact form fails gracefully with a clear error and a `mailto:` fallback instead of crashing or faking success.
 
@@ -68,20 +69,11 @@ Without `RESEND_API_KEY` set, the site still runs fine — the contact form fail
 | `npm run typecheck` | `tsc --noEmit` |
 | `npm test` | Run the Vitest suite |
 
-## Docker
+## Deployment
 
-```bash
-# Local development, with hot reload
-docker compose up -d
-docker compose logs -f
-docker compose down
+Production runs on one Ubuntu VPS: Node under PM2 (one process, bound to `127.0.0.1`), nginx in front, Cloudflare in front of that. [`deploy/README.md`](deploy/README.md) has the server setup, nginx and PM2 configs, and the deploy script.
 
-# Production image. SITE_URL is set at build time and kept for the server; .env files never enter the image.
-docker build --target runner --build-arg SITE_URL=https://example.com -t my-portfolio:prod .
-docker run -p 3000:3000 --env-file .env.local my-portfolio:prod
-```
-
-In production, put a reverse proxy such as nginx or Caddy in front of the container. The contact form's rate limit tells visitors apart by the address the proxy adds to `X-Forwarded-For`. Without a proxy, visitors can send a made-up address and get around the per-visitor limit.
+The contact form's rate limit tells visitors apart by the address nginx adds to `X-Forwarded-For`, so the app must only be reachable through nginx, and nginx must trust Cloudflare's addresses (`deploy/update-cloudflare-ips.sh`).
 
 ## Project structure
 
@@ -91,6 +83,7 @@ app/
   about/page.tsx                  About page
   work/quran-association-manager/ Project case study (static route — only one project exists)
   api/contact/route.ts            Contact form Route Handler
+  error.tsx, global-error.tsx     Error pages
   opengraph-image.tsx             Link-preview image (About and the case study have their own routes)
   sitemap.ts, robots.ts           Sitemap and robots.txt
 components/
@@ -100,7 +93,8 @@ components/
   theme/          Dark/light theme provider + toggle
   section-heading.tsx
 content/          Typed, factual copy (profile, experience, skills, project)
-lib/              Site URL and page metadata, link-preview card, rate limiting, dates, class names
+lib/              Site URL and page metadata, contact-form rules, link-preview card, rate limiting, dates, class names
+deploy/           PM2, nginx, and Cloudflare config, plus the deploy script
 ```
 
 ## Testing
@@ -109,7 +103,7 @@ lib/              Site URL and page metadata, link-preview card, rate limiting, 
 npm test
 ```
 
-Covers the experience-duration date helper, the contact-form rate limiter, and a content-integrity guard that fails if stale or invented content (wrong project names, unsupported claims) ever reappears in `content/`.
+Covers the experience-duration date helper, the contact-form rate limiter and email check, and a content-integrity guard that fails if stale or invented content (wrong project names, unsupported claims) ever reappears in `content/`.
 
 ## Contact
 

@@ -22,7 +22,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
-          node-version: 24 # same as the Dockerfile
+          node-version: 24 # same as the production server
           cache: npm
       - run: npm ci
       # Generates the route types (LayoutProps, PageProps) that tsc needs on a fresh checkout.
@@ -34,5 +34,16 @@ jobs:
       - run: npm run build
         env:
           SITE_URL: https://example.com
-      # The production image builds separately, with SITE_URL passed in as a build argument.
-      - run: docker build --target runner --build-arg SITE_URL=https://example.com .
+      # Runs the build the way PM2 does in production (deploy/), and checks it
+      # answers, serves public/ files, and sends its security headers.
+      - name: Smoke-test the standalone server
+        run: |
+          cp -r public .next/standalone/
+          cp -r .next/static .next/standalone/.next/
+          cd .next/standalone
+          HOSTNAME=127.0.0.1 PORT=3000 SITE_URL=https://example.com node server.js &
+          for _ in $(seq 1 20); do curl -fsS -o /dev/null http://127.0.0.1:3000/ && break; sleep 1; done
+          curl -fsS -o /dev/null http://127.0.0.1:3000/Salim_Elhani_CV.pdf
+          headers=$(curl -fsS -D - -o /dev/null http://127.0.0.1:3000/)
+          grep -qi '^content-security-policy:' <<< "$headers" || { echo "Security headers missing"; exit 1; }
+          if grep -qi '^x-powered-by:' <<< "$headers"; then echo "X-Powered-By is exposed"; exit 1; fi

@@ -3,8 +3,9 @@ type Options = { limit: number; windowMs: number; maxKeys?: number };
 
 /**
  * Fixed-window counter kept in this server process's memory. That suits one
- * long-running server such as the Docker image; on serverless hosts each
- * instance counts on its own, so there it only slows bursts down.
+ * long-running server process. Under PM2 cluster mode or on serverless hosts
+ * each process counts on its own, so the limits multiply: run a single fork
+ * (deploy/ecosystem.config.cjs).
  *
  * `hit` records one attempt for `key` and returns how many milliseconds to
  * wait before the next one, or 0 when this one is allowed. `release` takes
@@ -43,9 +44,10 @@ export function createRateLimiter({ limit, windowMs, maxKeys = 10_000 }: Options
  * Reverse proxies such as nginx and Caddy put the address they got the
  * request from at the end of x-forwarded-for; anything before it came from
  * the visitor and can be made up. Next.js only fills the header in when it's
- * missing, so with no proxy in front a visitor can still fake it: run the
- * production image behind one. If a CDN sits in front of that proxy, tell
- * the proxy to trust it, or every visitor ends up sharing the CDN's address.
+ * missing, so with no proxy in front a visitor can still fake it: keep the
+ * app on 127.0.0.1 behind one. If a CDN sits in front of that proxy, tell
+ * the proxy to trust it, or every visitor ends up sharing the CDN's address
+ * (deploy/update-cloudflare-ips.sh sets nginx up to trust Cloudflare).
  */
 export function clientIp(headers: Headers): string {
   const nearest = headers.get("x-forwarded-for")?.split(",").at(-1)?.trim();
