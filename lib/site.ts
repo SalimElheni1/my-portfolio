@@ -1,3 +1,5 @@
+// Reads server environment variables; fail the build if a client component imports it.
+import "server-only";
 import type { Metadata } from "next";
 import { profile } from "@/content/profile";
 import { projects } from "@/content/project";

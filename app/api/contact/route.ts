@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { profile } from "@/content/profile";
+import { CONTACT_MAX_LENGTHS, contactSubjectLabel, isValidEmail } from "@/lib/contact";
 import { clientIp, createRateLimiter } from "@/lib/rate-limit";
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
@@ -11,14 +12,9 @@ const RESEND_API_KEY = process.env.RESEND_API_KEY;
 // the override and this falls back to the public address.
 const CONTACT_TO_EMAIL = process.env.CONTACT_TO_EMAIL || profile.email;
 
-// Must match the options in components/home/contact-form.tsx.
-const SUBJECTS: Record<string, string> = {
-  "full-time": "Full-time role",
-  contract: "Contract or freelance",
-  other: "Something else",
-};
-
-const MAX_LENGTHS = { name: 100, email: 200, message: 5000 };
+// A real message is a few KB at most. nginx should cap bodies too (see
+// deploy/nginx.conf); this catches requests that reach the app directly.
+const MAX_BODY_BYTES = 16 * 1024;
 
 const HOUR = 60 * 60 * 1000;
 // Give up on Resend after this long, rather than leave the visitor waiting.
@@ -30,11 +26,39 @@ const RESEND_TIMEOUT_MS = 10_000;
 const perVisitor = createRateLimiter({ limit: 5, windowMs: HOUR });
 const perDay = createRateLimiter({ limit: 20, windowMs: 24 * HOUR });
 
-function isValidEmail(value: string): boolean {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+function fail(error: string, status: number, init?: ResponseInit) {
+  return NextResponse.json({ ok: false, error }, { ...init, status });
+}
+
+/**
+ * Browsers always send Origin on a POST, and a page on another site can't
+ * fake it, so a mismatch with the Host it was sent to means another site is
+ * submitting the form through its visitors' browsers. Requests without
+ * Origin (curl, scripts) aren't cross-site and still face the rate limits.
+ */
+function isCrossSite(headers: Headers): boolean {
+  const origin = headers.get("origin");
+  if (!origin) return false;
+  try {
+    return new URL(origin).host !== headers.get("host");
+  } catch {
+    return true;
+  }
 }
 
 export async function POST(request: Request) {
+  if (isCrossSite(request.headers)) {
+    return fail("Invalid request.", 403);
+  }
+  // Only JSON: a text/plain or form POST is a "simple" request that any site
+  // can send cross-origin without a CORS preflight.
+  if (!request.headers.get("content-type")?.toLowerCase().startsWith("application/json")) {
+    return fail("Invalid request.", 415);
+  }
+  if (Number(request.headers.get("content-length")) > MAX_BODY_BYTES) {
+    return fail("Invalid request.", 413);
+  }
+
   let body: Record<string, unknown> | null;
   try {
     body = await request.json();
@@ -42,11 +66,8 @@ export async function POST(request: Request) {
     body = null;
   }
   // `null` is valid JSON too, so a body that parses can still have no fields.
-  if (!body) {
-    return NextResponse.json(
-      { ok: false, error: "Invalid request." },
-      { status: 400 },
-    );
+  if (!body || typeof body !== "object") {
+    return fail("Invalid request.", 400);
   }
 
   // The name goes into the email's subject line, so line breaks and other
@@ -54,9 +75,7 @@ export async function POST(request: Request) {
   const name = typeof body.name === "string" ? body.name.replace(/[\s\p{Cc}]+/gu, " ").trim() : "";
   const email = typeof body.email === "string" ? body.email.trim() : "";
   const message = typeof body.message === "string" ? body.message.trim() : "";
-  const subjectKey = typeof body.subject === "string" ? body.subject : "";
-  // hasOwn, so keys every object inherits (like "constructor") aren't taken for subjects.
-  const subject = Object.hasOwn(SUBJECTS, subjectKey) ? SUBJECTS[subjectKey] : SUBJECTS.other;
+  const subject = contactSubjectLabel(body.subject);
   // Honeypot: a field real visitors never see or fill in (hidden via CSS).
   // Bots that auto-fill every input tend to fill it — if it's non-empty,
   // pretend success without actually sending anything.
@@ -69,44 +88,32 @@ export async function POST(request: Request) {
   }
 
   if (!name || !email || !message) {
-    return NextResponse.json(
-      { ok: false, error: "Please fill in every field." },
-      { status: 400 },
-    );
+    return fail("Please fill in every field.", 400);
+  }
+  // Lengths before the email check, so no pattern ever runs on a huge value.
+  if (
+    name.length > CONTACT_MAX_LENGTHS.name ||
+    email.length > CONTACT_MAX_LENGTHS.email ||
+    message.length > CONTACT_MAX_LENGTHS.message
+  ) {
+    return fail("One of the fields is too long.", 400);
   }
   if (!isValidEmail(email)) {
-    return NextResponse.json(
-      { ok: false, error: "That email address doesn't look right." },
-      { status: 400 },
-    );
-  }
-  if (
-    name.length > MAX_LENGTHS.name ||
-    email.length > MAX_LENGTHS.email ||
-    message.length > MAX_LENGTHS.message
-  ) {
-    return NextResponse.json(
-      { ok: false, error: "One of the fields is too long." },
-      { status: 400 },
-    );
+    return fail("That email address doesn't look right.", 400);
   }
 
   if (!RESEND_API_KEY) {
     console.error("RESEND_API_KEY is not set.");
-    return NextResponse.json(
-      { ok: false, error: "The contact form isn't configured yet." },
-      { status: 500 },
-    );
+    return fail("The contact form isn't configured yet.", 500);
   }
 
   // Visitor first, so someone already blocked doesn't use up the daily cap.
   const visitor = clientIp(request.headers);
   const retryAfterMs = perVisitor.hit(visitor) || perDay.hit("all");
   if (retryAfterMs) {
-    return NextResponse.json(
-      { ok: false, error: "Too many messages right now. Please try again later." },
-      { status: 429, headers: { "Retry-After": String(Math.ceil(retryAfterMs / 1000)) } },
-    );
+    return fail("Too many messages right now. Please try again later.", 429, {
+      headers: { "Retry-After": String(Math.ceil(retryAfterMs / 1000)) },
+    });
   }
 
   let emailResponse: Response | undefined;
@@ -140,10 +147,7 @@ export async function POST(request: Request) {
     // lock visitors out after a few retries.
     perVisitor.release(visitor);
     perDay.release("all");
-    return NextResponse.json(
-      { ok: false, error: "Something went wrong sending your message." },
-      { status: 502 },
-    );
+    return fail("Something went wrong sending your message.", 502);
   }
 
   return NextResponse.json({ ok: true });

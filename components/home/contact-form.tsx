@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { profile } from "@/content/profile";
+import { CONTACT_MAX_LENGTHS, CONTACT_SUBJECTS } from "@/lib/contact";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -10,12 +11,6 @@ const fieldClassName =
 
 const labelClassName =
   "font-mono text-[11px] font-medium uppercase leading-4 tracking-[0.06em] text-muted";
-
-const subjects = [
-  { value: "full-time", label: "Full-time role" },
-  { value: "contract", label: "Contract or freelance" },
-  { value: "other", label: "Something else" },
-];
 
 export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
@@ -92,7 +87,7 @@ export function ContactForm() {
             type="text"
             autoComplete="name"
             required
-            maxLength={100}
+            maxLength={CONTACT_MAX_LENGTHS.name}
             disabled={status === "submitting"}
             className={`${fieldClassName} h-[46px]`}
           />
@@ -107,7 +102,7 @@ export function ContactForm() {
             type="email"
             autoComplete="email"
             required
-            maxLength={200}
+            maxLength={CONTACT_MAX_LENGTHS.email}
             disabled={status === "submitting"}
             className={`${fieldClassName} h-[46px]`}
           />
@@ -121,11 +116,11 @@ export function ContactForm() {
         <select
           id="subject"
           name="subject"
-          defaultValue="full-time"
+          defaultValue={CONTACT_SUBJECTS[0].value}
           disabled={status === "submitting"}
           className={`${fieldClassName} h-[46px]`}
         >
-          {subjects.map((option) => (
+          {CONTACT_SUBJECTS.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
             </option>
@@ -142,7 +137,7 @@ export function ContactForm() {
           name="message"
           required
           rows={4}
-          maxLength={5000}
+          maxLength={CONTACT_MAX_LENGTHS.message}
           disabled={status === "submitting"}
           className={`${fieldClassName} resize-y py-3 leading-[1.55]`}
         />
