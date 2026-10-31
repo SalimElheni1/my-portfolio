@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { profile } from "@/content/profile";
-import { CONTACT_MAX_LENGTHS, contactSubjectLabel, isValidEmail } from "@/lib/contact";
+import {
+  CONTACT_MAX_LENGTHS,
+  contactSubjectLabel,
+  isValidEmail,
+} from "@/lib/contact";
 import { clientIp, createRateLimiter } from "@/lib/rate-limit";
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
@@ -52,7 +56,12 @@ export async function POST(request: Request) {
   }
   // Only JSON: a text/plain or form POST is a "simple" request that any site
   // can send cross-origin without a CORS preflight.
-  if (!request.headers.get("content-type")?.toLowerCase().startsWith("application/json")) {
+  if (
+    !request.headers
+      .get("content-type")
+      ?.toLowerCase()
+      .startsWith("application/json")
+  ) {
     return fail("Invalid request.", 415);
   }
   if (Number(request.headers.get("content-length")) > MAX_BODY_BYTES) {
@@ -72,14 +81,18 @@ export async function POST(request: Request) {
 
   // The name goes into the email's subject line, so line breaks and other
   // control characters become plain spaces.
-  const name = typeof body.name === "string" ? body.name.replace(/[\s\p{Cc}]+/gu, " ").trim() : "";
+  const name =
+    typeof body.name === "string"
+      ? body.name.replace(/[\s\p{Cc}]+/gu, " ").trim()
+      : "";
   const email = typeof body.email === "string" ? body.email.trim() : "";
   const message = typeof body.message === "string" ? body.message.trim() : "";
   const subject = contactSubjectLabel(body.subject);
   // Honeypot: a field real visitors never see or fill in (hidden via CSS).
   // Bots that auto-fill every input tend to fill it — if it's non-empty,
   // pretend success without actually sending anything.
-  const honeypot = typeof body.hp_field === "string" ? body.hp_field.trim() : "";
+  const honeypot =
+    typeof body.hp_field === "string" ? body.hp_field.trim() : "";
 
   if (honeypot) {
     // Logged, so a real message caught here by mistake doesn't vanish without a trace.
@@ -125,7 +138,7 @@ export async function POST(request: Request) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "Portfolio Contact Form <onboarding@resend.dev>",
+        from: "Portfolio <contact@mail.salimelhani.tn>",
         to: [CONTACT_TO_EMAIL],
         reply_to: email,
         subject: `${subject}: new message from ${name} (via portfolio site)`,

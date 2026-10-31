@@ -73,6 +73,11 @@ export function ContactForm() {
           name="hp_field"
           tabIndex={-1}
           autoComplete="off"
+          readOnly
+          defaultValue=""
+          data-1p-ignore // 1Password
+          data-lpignore="true" // LastPass
+          data-bwignore // Bitwarden
         />
       </div>
 

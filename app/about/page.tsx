@@ -4,6 +4,8 @@ import { experience, education } from "@/content/experience";
 import { projects } from "@/content/project";
 import { SectionHeading } from "@/components/section-heading";
 import { pageMetadata } from "@/lib/site";
+import Image from "next/image";
+import photo from "@/public/salim-elhani.webp";
 
 export const metadata = pageMetadata({
   title: "About",
@@ -18,8 +20,27 @@ export default function AboutPage() {
   return (
     <div className="wrap py-14 sm:py-20">
       <div className="max-w-3xl">
-        <h1 className="font-display text-4xl font-semibold tracking-tighter text-heading sm:text-5xl">About</h1>
-        <p className="mt-8 text-lg leading-relaxed text-body sm:text-xl">{profile.summary}</p>
+        <div className="flex flex-col gap-8 sm:flex-row sm:items-center sm:gap-10">
+          <Image
+            src={photo}
+            alt={`Portrait of ${profile.name}`}
+            placeholder="blur"
+            loading="eager"
+            sizes="(min-width: 640px) 160px, 128px"
+            className="size-32 shrink-0 rounded-full object-cover ring-1 ring-line sm:size-40"
+          />
+          <div>
+            <h1 className="font-display text-4xl font-semibold tracking-tighter text-heading sm:text-5xl">
+              About
+            </h1>
+            <p className="mt-4 font-mono text-sm text-muted">
+              {profile.title} · {profile.location}
+            </p>
+          </div>
+        </div>
+        <p className="mt-8 text-lg leading-relaxed text-body sm:text-xl">
+          {profile.summary}
+        </p>
 
         <section aria-labelledby="experience-heading" className="mt-20">
           <SectionHeading id="experience-heading">Experience</SectionHeading>
@@ -32,14 +53,23 @@ export default function AboutPage() {
                   >
                     {item.role}, {item.organization}
                   </h3>
-                  <span className="shrink-0 font-mono text-xs text-muted">{item.period}</span>
+                  <span className="shrink-0 font-mono text-xs text-muted">
+                    {item.period}
+                  </span>
                 </div>
                 <p className="mt-1 text-sm text-muted">{item.location}</p>
-                {item.summary && <p className="mt-3 text-base leading-relaxed text-muted">{item.summary}</p>}
+                {item.summary && (
+                  <p className="mt-3 text-base leading-relaxed text-muted">
+                    {item.summary}
+                  </p>
+                )}
                 {item.highlights.length > 0 && (
                   <ul className="mt-4 flex flex-col gap-2">
                     {item.highlights.map((point) => (
-                      <li key={point} className="text-base leading-relaxed text-muted">
+                      <li
+                        key={point}
+                        className="text-base leading-relaxed text-muted"
+                      >
                         {point}
                       </li>
                     ))}
@@ -63,10 +93,15 @@ export default function AboutPage() {
                             sub.name
                           )}
                         </h4>
-                        <p className="mt-1 text-sm text-muted">{sub.description}</p>
+                        <p className="mt-1 text-sm text-muted">
+                          {sub.description}
+                        </p>
                         <ul className="mt-3 flex flex-col gap-2">
                           {sub.highlights.map((point) => (
-                            <li key={point} className="text-sm leading-relaxed text-muted">
+                            <li
+                              key={point}
+                              className="text-sm leading-relaxed text-muted"
+                            >
                               {point}
                             </li>
                           ))}
@@ -84,10 +119,16 @@ export default function AboutPage() {
           <SectionHeading id="project-heading">Personal project</SectionHeading>
           <div className="mt-8">
             <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
-              <h3 className="font-display text-lg font-medium text-heading">{project.name}</h3>
-              <span className="shrink-0 font-mono text-xs text-muted">{project.period}</span>
+              <h3 className="font-display text-lg font-medium text-heading">
+                {project.name}
+              </h3>
+              <span className="shrink-0 font-mono text-xs text-muted">
+                {project.period}
+              </span>
             </div>
-            <p className="mt-3 text-base leading-relaxed text-muted">{project.description}</p>
+            <p className="mt-3 text-base leading-relaxed text-muted">
+              {project.description}
+            </p>
             <Link
               href={`/work/${project.slug}`}
               className="mt-4 inline-flex border-b border-accent-dim pb-0.5 font-display text-sm font-medium text-accent-ink transition-colors hover:border-accent-bright hover:text-ink"
@@ -106,10 +147,14 @@ export default function AboutPage() {
                 className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6"
               >
                 <div>
-                  <p className="font-display text-base font-medium text-heading">{item.credential}</p>
+                  <p className="font-display text-base font-medium text-heading">
+                    {item.credential}
+                  </p>
                   <p className="text-sm text-muted">{item.institution}</p>
                 </div>
-                <span className="shrink-0 font-mono text-xs text-muted">{item.period}</span>
+                <span className="shrink-0 font-mono text-xs text-muted">
+                  {item.period}
+                </span>
               </li>
             ))}
           </ul>
@@ -120,7 +165,8 @@ export default function AboutPage() {
           <ul className="mt-8 flex flex-col gap-2 text-base text-muted">
             {profile.languages.map((lang) => (
               <li key={lang.name}>
-                <span className="text-heading">{lang.name}</span>, {lang.level.toLowerCase()}
+                <span className="text-heading">{lang.name}</span>,{" "}
+                {lang.level.toLowerCase()}
               </li>
             ))}
           </ul>
