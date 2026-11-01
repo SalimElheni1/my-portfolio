@@ -53,7 +53,8 @@ Set these in `.env.local` (never committed — see `.env.example`):
 |---|---|---|
 | `SITE_URL` | Production | The site's public address, no trailing slash, used for canonical links, the sitemap, `robots.txt`, and social previews. Pages are prerendered at build time and refreshed once a day while the site runs, so the build and the running server both need it (`deploy/deploy.sh` reads it from the server's env file for both). The build refuses to run without it; local dev falls back to `http://localhost:3000` |
 | `RESEND_API_KEY` | Sending contact-form emails | Free at [resend.com](https://resend.com), 3,000 emails/month |
-| `CONTACT_TO_EMAIL` | Overriding the delivery inbox | Resend's unverified/sandbox mode only delivers to the address the account is signed up with. Remove this once a domain is bought and verified in Resend — it then falls back to the public email in `content/profile.ts` |
+| `CONTACT_TO_EMAIL` | Choosing the delivery inbox | Defaults to the public email in `content/profile.ts`; set it to send contact-form notifications elsewhere |
+| `CONTACT_FROM_EMAIL` | Sending from a different address | Defaults to the verified Resend sender `Portfolio <contact@mail.salimelhani.tn>`. In Resend's sandbox mode (no verified domain) set it to `onboarding@resend.dev`; sandbox also only delivers to the account's own address |
 | `ALLOWED_DEV_ORIGINS` | Dev on other LAN devices | Comma-separated addresses (e.g. a phone at `192.168.1.20`) allowed to load the dev server |
 
 Without `RESEND_API_KEY` set, the site still runs fine — the contact form fails gracefully with a clear error and a `mailto:` fallback instead of crashing or faking success.

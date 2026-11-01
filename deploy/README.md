@@ -103,6 +103,10 @@ Run as root unless noted. Replace `salimelhani.tn` throughout if the domain diff
    ```
 
    ```bash
+   nginx -t && systemctl reload nginx
+   ```
+
+   ```bash
    bash deploy/update-cloudflare-ips.sh
    ```
 
@@ -134,14 +138,22 @@ bash deploy/deploy.sh main
 /var/www/portfolio/deploy.sh main
 ```
 
+The argument is a branch or tag (default `main`); `git clone --branch` doesn't
+take a commit SHA.
+
 If the repository is private, give the `deploy` user a read-only GitHub deploy
 key and run with `REPO=git@github.com:SalimElheni1/my-portfolio.git`.
 
 Each run clones the ref, builds it with `SITE_URL` from the env file, copies
 in `public/` and `.next/static`, points `current` at the new release, reloads
 PM2, and checks `http://127.0.0.1:3000/`. If that doesn't answer within 15
-seconds it switches back to the previous release and exits non-zero. The last
-three releases are kept.
+seconds it switches back to the previous release, deletes the release that
+failed (or keeps it for inspection when there's nothing to roll back to), and
+exits non-zero. Once the release is live it also checks that nginx answers for
+the site's host on port 80 (a redirect to HTTPS), so a vhost that isn't loaded
+at all doesn't look like a successful deploy. It can't tell an outdated config
+from the latest one, so still run `nginx -t && systemctl reload nginx` after
+editing it. The last three releases are kept.
 
 **Manual rollback**
 
@@ -164,3 +176,8 @@ To keep builds off the VPS entirely, build in CI with the same `SITE_URL`,
 copy `public/` and `.next/static` into `.next/standalone` as `deploy.sh` does,
 upload that folder to `/var/www/portfolio/releases/<timestamp>`, and point
 `current` at it.
+
+`next build` copies your `.env*` files into `.next/standalone`; `npm run build`
+runs a `postbuild` step that deletes them, so a locally built artifact never
+carries your Resend key. Production reads its secrets from
+`/etc/portfolio/portfolio.env` (PM2's `--env-file`), not from the release.

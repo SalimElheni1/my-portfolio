@@ -6,18 +6,23 @@ import {
   isValidEmail,
 } from "@/lib/contact";
 import { clientIp, createRateLimiter } from "@/lib/rate-limit";
+import { readJsonBody } from "@/lib/request-body";
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 
-// Resend's unverified/sandbox mode only allows delivery to the exact email
-// address the Resend account was signed up with — not the public contact
-// address in profile.ts. CONTACT_TO_EMAIL overrides where notifications
-// actually land; once a domain is bought and verified with Resend, remove
-// the override and this falls back to the public address.
+// Where notifications land. The public contact address in profile.ts is the
+// sensible default; set CONTACT_TO_EMAIL to send them elsewhere instead.
 const CONTACT_TO_EMAIL = process.env.CONTACT_TO_EMAIL || profile.email;
 
-// A real message is a few KB at most. nginx should cap bodies too (see
-// deploy/nginx.conf); this catches requests that reach the app directly.
+// The Resend sender. mail.salimelhani.tn is verified in Resend, so any
+// address on that subdomain can send. Set CONTACT_FROM_EMAIL to override it,
+// e.g. onboarding@resend.dev while the domain is still unverified.
+const CONTACT_FROM_EMAIL =
+  process.env.CONTACT_FROM_EMAIL || "Portfolio <contact@mail.salimelhani.tn>";
+
+// A real message is a few KB at most. nginx caps bodies too (see
+// deploy/nginx/portfolio.conf); this catches requests that reach the app
+// directly, including chunked ones with no Content-Length to check.
 const MAX_BODY_BYTES = 16 * 1024;
 
 const HOUR = 60 * 60 * 1000;
@@ -32,6 +37,12 @@ const perDay = createRateLimiter({ limit: 20, windowMs: 24 * HOUR });
 
 function fail(error: string, status: number, init?: ResponseInit) {
   return NextResponse.json({ ok: false, error }, { ...init, status });
+}
+
+function tooMany(retryAfterMs: number) {
+  return fail("Too many messages right now. Please try again later.", 429, {
+    headers: { "Retry-After": String(Math.ceil(retryAfterMs / 1000)) },
+  });
 }
 
 /**
@@ -68,16 +79,17 @@ export async function POST(request: Request) {
     return fail("Invalid request.", 413);
   }
 
-  let body: Record<string, unknown> | null;
-  try {
-    body = await request.json();
-  } catch {
-    body = null;
+  // Read with a cap rather than `request.json()`: a chunked body has no
+  // Content-Length, so the check above can't stop it from buffering.
+  const parsed = await readJsonBody(request, MAX_BODY_BYTES);
+  if (!parsed.ok) {
+    return fail("Invalid request.", parsed.reason === "too-large" ? 413 : 400);
   }
   // `null` is valid JSON too, so a body that parses can still have no fields.
-  if (!body || typeof body !== "object") {
+  if (!parsed.value || typeof parsed.value !== "object") {
     return fail("Invalid request.", 400);
   }
+  const body = parsed.value as Record<string, unknown>;
 
   // The name goes into the email's subject line, so line breaks and other
   // control characters become plain spaces.
@@ -122,11 +134,13 @@ export async function POST(request: Request) {
 
   // Visitor first, so someone already blocked doesn't use up the daily cap.
   const visitor = clientIp(request.headers);
-  const retryAfterMs = perVisitor.hit(visitor) || perDay.hit("all");
-  if (retryAfterMs) {
-    return fail("Too many messages right now. Please try again later.", 429, {
-      headers: { "Retry-After": String(Math.ceil(retryAfterMs / 1000)) },
-    });
+  const visitorRetryAfterMs = perVisitor.hit(visitor);
+  if (visitorRetryAfterMs) return tooMany(visitorRetryAfterMs);
+  const dailyRetryAfterMs = perDay.hit("all");
+  if (dailyRetryAfterMs) {
+    // The message wasn't sent, so give the visitor their hourly slot back.
+    perVisitor.release(visitor);
+    return tooMany(dailyRetryAfterMs);
   }
 
   let emailResponse: Response | undefined;
@@ -138,7 +152,7 @@ export async function POST(request: Request) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "Portfolio <contact@mail.salimelhani.tn>",
+        from: CONTACT_FROM_EMAIL,
         to: [CONTACT_TO_EMAIL],
         reply_to: email,
         subject: `${subject}: new message from ${name} (via portfolio site)`,

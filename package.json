@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "postbuild": "rm -f .next/standalone/.env .next/standalone/.env.*",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
