@@ -1,5 +1,5 @@
-# Checks every push and pull request: types, lint, tests, and a production build.
-name: CI
+# Checks every push and pull request, then deploys successful main-branch pushes.
+name: CI & CD
 
 on:
   push:
@@ -11,7 +11,7 @@ permissions:
 
 concurrency:
   group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   check:
@@ -47,3 +47,17 @@ jobs:
           headers=$(curl -fsS -D - -o /dev/null http://127.0.0.1:3000/)
           grep -qi '^content-security-policy:' <<< "$headers" || { echo "Security headers missing"; exit 1; }
           if grep -qi '^x-powered-by:' <<< "$headers"; then echo "X-Powered-By is exposed"; exit 1; fi
+
+  deploy:
+    name: Deploy to Production VPS
+    needs: check
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy application via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_IP }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: /var/www/portfolio/deploy.sh main
